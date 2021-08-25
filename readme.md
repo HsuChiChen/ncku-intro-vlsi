@@ -12,12 +12,12 @@ Time : 2021 spring (second half semester of sophomore)
 
 ## Report
 > more info in doc/*.docx
-- [lab02](#lab02)
-- [lab03](#lab03)
-- [lab04](#lab04)
-- [lab05](#lab05)
-- [lab06](#lab06)
-- [lab08](#lab08)
+- [lab2](#lab2)
+- [lab3](#lab3)
+- [lab4](#lab4)
+- [lab5](#lab5)
+- [lab6](#lab6)
+- [lab8](#lab8)
 
 <br>
 
