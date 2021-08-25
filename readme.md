@@ -45,19 +45,19 @@ Time : 2021 spring (second half semester of sophomore)
 
 |     Description                                   |     Command                           |
 |---------------------------------------------------|---------------------------------------|
-|     Run RTL Convolution simulation                |     make rtl0                         |
-|     Run RTL Pooling simulation                    |     make rtl1                         |
-|     Run RTL simulation                            |     make rtl_full                     |
-|     Run post-synthesis simulation                 |     make syn_full                     |
-|     Dump waveform (no array)                      |     make {rtlX, syn_full} FSDB=1      |
-|     Dump waveform (with array)                    |     make {rtlX, syn_full}   FSDB=2    |
-|     Open nWave without file pollution             |     make nWave                        |
-|     Open Superlint without file   pollution       |     make superlint                    |
-|     Open DesignVision without file   pollution    |     make dv                           |
-|     Synthesize your RTL code                      |     make synthesize                   |
-|     Check correctness of your file   structure    |     make check                        |
-|     Compress your homework to tar   format        |     make tar                          |
-|     Count the total lines of your   code          |     wc –l ./src/*   ./include/*       |
+|     Run RTL Convolution simulation                |     `make rtl0`                       |
+|     Run RTL Pooling simulation                    |     `make rtl1`                       |
+|     Run RTL simulation                            |     `make rtl_full`                   |
+|     Run post-synthesis simulation                 |     `make syn_full`                   |
+|     Dump waveform (no array)                      |     `make {rtlX, syn_full} FSDB=1`    |
+|     Dump waveform (with array)                    |     `make {rtlX, syn_full}   FSDB=2`  |
+|     Open nWave without file pollution             |     `make nWave`                      |
+|     Open Superlint without file   pollution       |     `make superlint`                  |
+|     Open DesignVision without file   pollution    |     `make dv`                         |
+|     Synthesize your RTL code                      |     `make synthesize`                 |
+|     Check correctness of your file   structure    |     `make check`                      |
+|     Compress your homework to tar   format        |     `make tar`                        |
+|     Count the total lines of your   code          |     `wc –l ./src/*   ./include/*`     |
 
 - compile
 ```
@@ -102,12 +102,12 @@ ncverilog top_module_tb.v +define+FSDB+syn access+r
 - Superlint
     1. open
     ```
-    jg-superlint
+    jg -superlint
     ```
     2. `File` -> `TclScripts` -> `Source`
     3. Count the number of total lines
     ```
-    wc–l filename
+    wc –l filename
     ```
 
 - check file hierarchy
@@ -177,7 +177,7 @@ conversion formula : `y = 0.3125r + 0.5625g + 0.125b`
 
 ## lab4
 ### Register File
-模擬64 X 32 register file寫入、存取、讀出的狀況。
+模擬 `64x32` register file寫入、存取、讀出的狀況。
 
 ### Vending Machine
 分為三個階段
@@ -200,29 +200,29 @@ conversion formula : `y = 0.3125r + 0.5625g + 0.125b`
 ## lab5
 ### Moore Machine
 
-|CurrentState|NS(din=0)|NS(din=1)|qout|
+|CurrentState|NS (din = 0)|NS (din = 1)|qout|
 |:---:|:---:|:---:|:---:|
-|S0=00|S2|S1|1|
-|S0=01|S1|S0|0|
-|S0=10|S3|S2|0|
-|S0=1|S3|S1|1|
+|S0 = 00|S2|S1|1|
+|S0 = 01|S1|S0|0|
+|S0 = 10|S3|S2|0|
+|S0 = 11|S3|S1|1|
 
 ![](img/lab5_1.svg)
 
 ### Mealy Machine
 
-|Current State|Next State,output||
+|Current State|Next State, output||
 |:-:|:-:|:-:|
-|X|din=0|din=1|
-|S0=00|S1,0|S2,0|
-|S1=01|S1,1|S2,0|
-|S2=11|S2,0|S0,1|
+|X|din = 0|din = 1|
+|S0 = 00|S1,0|S2,0|
+|S1 = 01|S1,1|S2,0|
+|S2 = 11|S2,0|S0,1|
 
 ![](img/lab5_2.svg)
 
 ### Memory
-- a 65536x24 bits random access memory
-- a 16384x24 bits read only memory
+- a `65536x24` bits random access memory
+- a `16384x24` bits read only memory
 
 ### MAC using Shift Register
 
@@ -244,7 +244,7 @@ a cascade of flip flops.The output of each flip flop is connected to the input o
 
 ### Grayscale Conversion System
 1. spec<br>
-The system will be able to change RGB pictures to grayscale pictures
+The system will be able to **change RGB pictures to grayscale pictures**
 2. block diagram of system
 ![](img/lab5_3.svg)
 
@@ -296,7 +296,7 @@ Coverage:`100%` (No any error or warning)
 
 |Timing(slack)|Area(total cell area)|Power(total)|
 |:-:|:-:|:-:|
-|5.49|3839.52|0.1058mW|
+|`5.49`|`3839.52`|`0.1058mW`|
 
 10. Waveform after Synthesis
 ![](img/lab5_16.png)
@@ -341,8 +341,8 @@ integrate all components that you have learned so far to form a **simple convolu
 
 |Clock period|no more than 20 ns|
 |:-:|:-:|
-|Synthesized Verilog file|system_syn.v|
-|Timing constraint file|system_syn.sdf|
+|Synthesized Verilog file|`system_syn.v`|
+|Timing constraint file|`system_syn.sdf`|
 
 ###  state diagram
 - by myself (illustrator)
@@ -370,6 +370,7 @@ integrate all components that you have learned so far to form a **simple convolu
 
 ###  simulation result
 - terminal
+
 ![](img/lab6_6.png)
 
 -  image
@@ -380,27 +381,37 @@ integrate all components that you have learned so far to form a **simple convolu
 
 ###  Waveform
 1. `cs[2:0]=READ_W`
+
 ![](img/lab6_9.png)
 
+<br>
+
 2. `cs[2:0]=READ_9`
+
 ![](img/lab6_10.png)
 讀9筆資料，但因為**地址都要早一個Cycle給**，所以如上圖`count[3:0]`從0加到9，**共花了10個Cycle去完成`READ_9`這個state**。Cycle1、2、3、4、7 **`pad_en`拉高**，此時不用管地址，因為都是輸出0，而Cycle5、6、8、9，如上圖地址分別是**0、1、256、257**。`ROM_IF_OE`拉高讀ROM裡面原始企鵝的資料；而`RAM_CONV_WE`拉高把做完Convolution運算結果寫入`RAM_CONV`保存。
 
+<br>
+
 3. `cs[2:0]=READ_C`
-![](img/lab6_11.png)
+
+![](img/lab6_11.png)<br>
 如上述`cs[2:0]=READ_9`的行為，差別是指需要讀3筆資料而已，如上圖`count[3:0]`從0加到3，所以花了3+1=4個Cycle去完成。大部分的情況都是這樣，依序`READ_C`、`WRITE_C`交替。
-![](img/lab6_12.png)
+![](img/lab6_12.png)<br>
 在`column == 18'd255`時`padding`全部拉高，此時相對位置在Input Feature Map的右下角，接下來跳到狀態`READ_9`，row = row+1，而column歸0，從零開始數，如此不斷循環。
-![](img/lab6_13.png)
+![](img/lab6_13.png)<br>
 直到`address == 18'd65535`時，第一階段Convolution完成，跳至下一個state-`READ_P`
 
+<br>
+
 4. `cs[2:0]=READ_P`
-![](img/lab6_14.png)
+
+![](img/lab6_14.png)<br>
 一樣地址要早一個cycle給，`pool_en`拉高時，允許寫入 `Pooling.v`，如果`pool_en`拉低，我的設計就是維持`Pooling.v`的值。`RAM_CONV_OE`拉高為
 把前一個做完Convoulution保存在`RAM_CONV`的data讀進來；而`RAM_POOL_WE`拉高則把結果寫入`RAM_POOL`保存。
-![](img/lab6_15.png)
+![](img/lab6_15.png)<br>
 在`column2 == 18'd254`時`row2 = row2+2`，而column歸0，從零開始數，如此不斷循環。
-![](img/lab6_16.png)
+![](img/lab6_16.png)<br>
 當 `address2 == 18'd16383`時，第二階段`Pooling`完成，`DONE`拉高並卡在無窮迴圈之中，RTL code全部一、二階段執行流程結束。
 
 ###  SuperLint Coverage
@@ -439,14 +450,14 @@ Coverage : `99%` (2error in `system.v`)
 |`NOR`|先做OR再做NOT|
 
 ## 心得
-這堂課前半段是寫`Verilog`做數位電路模擬合成，用到的基本觀念有數位邏輯設計、計算機組織與`unix-like`環境的基本使用；後半段是`layout`，用到的基本觀念有電子學一二，但由於新冠疫情在本土延燒，後半的課只有上到lab9，在畫完inverter、nand、nor的`layout`後就幾乎結束了，有些可惜，不過二下課業繁重。也給了我喘息讀電子學等科目的時間。
+這堂課前半段是寫`Verilog`做數位電路模擬合成，用到的基本觀念有數位邏輯設計、計算機組織與`unix-like`環境的基本使用；後半段是`layout`，用到的基本觀念有電子學一二，但由於新冠疫情在本土延燒，後半的課只有上到lab9，在畫完inverter、nand、nor的`layout`後就幾乎結束了，有些可惜，不過大二下課業繁重。也給了我喘息的時間去讀電子學等其他科目。
 <br>
 比較重要或有趣的電路有
 - lab5第五部分的`grayscale conversion system`
 - lab6也就是final froject的`simple convolution system`
 
-讓我學到要如何把演算法轉換成`RTL code`，尤其是lab6的**邊界條件**這部分真的很麻煩，再加上發現助教`testbench`似乎有把從`ROM`讀入的data調晚1個cycle，這些東西真的花了我很多的時間去完成，不過我也學到了很多東西，有了一點由自己`design`的感覺。
+讓我學到要如何把演算法轉換成`RTL code`，尤其是lab6的**邊界條件**這部分是主要的困難點，再加上發現助教給的`testbench`似乎有把從`ROM`讀入的data調晚1個cycle，這些東西花了我很多的時間去完成，不過我也學到了很多東西，有了一點**由自己去design**的感覺。
 <br><br>
-其實很多部分都是助教代勞，像是linux環境下的`shell script`, `makefile`，與由高階語言生成的`golden data`與`testbench`驗證，以及那些sysyem基本的`block`與彼此之間的`port`接線，我們學生完成的是**block內部電路的FSM實現**。
+其實這次作業很多部分是由助教代勞，像是linux環境下的`shell script`, `makefile`、由高階語言生成的`golden data`與`testbench`驗證以及那些system的`block`與彼此之間的`port`接線，我們學生完成的是**block內部電路的FSM實現**。
 <br><br>
-上完這堂課我覺得我應該精進自己的coding能力與對linux的掌握度，希望能達到真正了解整個設計流程的`designer`，別人開好文字描述的`spec`，自己從無到有、全部自己弄的獨立感。
+上完這堂課我覺得我應該精進自己的coding能力與對linux的掌握度，希望能達到真正了解整個設計流程的**designer**，別人開好文字描述的`spec`，自己從無到有、全部自己弄的獨立感。
