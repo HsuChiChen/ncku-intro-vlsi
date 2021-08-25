@@ -1,0 +1,2147 @@
+//////////////////////////////////////////////////////////////////////
+//                                                                  //
+//     Title : DRC (Calibre) of CIC 0.18um 1.8V/3.3V 1P6M virtual Mixed Mode/RFCMOS Process  //
+//     Parent Document  : CIC 0.18um 1.8V/3.3V 1P6M virtual Mixed Mode/RFCMOS Process design_rule //
+//     Revision  : 1.0                                              //
+//     Written by: W.S. Chang                           //
+//     Modified by:                            //
+//////////////////////////////////////////////////////////////////////
+// revision  date      who              changes                     //
+//========= ======= ======== =======================================//
+//  1.0    06/06/05 W S Chang   			            //
+//  1.1    02/20/09 K C Peng
+//////////////////////////////////////////////////////////////////////
+// Notice (Important, Read Me First)
+// =================================
+// (1) Please set up RESOLUTION,LAYOUT PATH,LAYOUT PRIMARY 
+//     according to your design before run CALIBRE drc.
+//     Set up DRC UNSLECT CHECK as your requirements
+//     Use DRC SELECT CHECK to check one or two groups only
+// (2) RF Rule NOT checked
+//////////////////////////////////////////////////////////////////////
+
+
+LAYER MAP	1	DATATYPE	0	1001
+LAYER DIFF		1001		// Diffusion
+LAYER MAP	3	DATATYPE	0	1002
+LAYER NWEL		1002		// N-well
+LAYER MAP	6	DATATYPE	0	1003
+LAYER TWEL		1003		// T-well for Triple Well Process
+LAYER MAP	11	DATATYPE	0	1004
+LAYER PPLUS		1004		// P+ Imp
+LAYER MAP	12	DATATYPE	0	1005
+LAYER NPLUS		1005		// N+ Imp
+LAYER MAP	20	DATATYPE	0	1006
+LAYER VTPL		1006		// Low Vt PMOS
+LAYER MAP	21	DATATYPE	0	1007
+LAYER VTPHL		1007		// Thick gate Low Vt PMOS
+LAYER MAP	22	DATATYPE	0	1008
+LAYER VTNL		1008		// Low Vt NMOS; Thick gate Low Vt NMOS
+LAYER MAP	23	DATATYPE	0	1009
+LAYER VTNI		1009		// Zero Vt NMOS
+LAYER MAP	24	DATATYPE	0	1010
+LAYER VTNHL		1010		// Thick gate Low Vt NMOS
+LAYER MAP	31	DATATYPE	0	1011
+LAYER ESD		1011		// ESD Imp
+LAYER MAP	32	DATATYPE	0	1012
+LAYER PESD		1012		// P+ ESD Imp
+LAYER MAP	36	DATATYPE	0	1013
+LAYER SAB		1013		// Salicide Block
+LAYER MAP	37	DATATYPE	0	1014
+LAYER TG		1014		// Thick Oxide
+LAYER MAP	38	DATATYPE	0	1015
+LAYER HR		1015		// High Resistor
+LAYER MAP	39	DATATYPE	0	1016
+LAYER CONT		1016		// Contact
+LAYER MAP	40	DATATYPE	0	1017
+LAYER NWR		1017		// N-well Resistor
+LAYER MAP	41	DATATYPE	0	1018
+LAYER PO1		1018		// Poly1
+LAYER MAP	41	DATATYPE	10	1019
+LAYER PO_LVS		1019		// 0.13 Virage SRAM excluding Layer
+LAYER MAP	43	DATATYPE	0	1020
+LAYER VARACT		1020		// Varactor layer for Vtn operation
+LAYER MAP	46	DATATYPE	0	1021
+LAYER ME1		1021		// Metal1
+LAYER MAP	47	DATATYPE	0	1022
+LAYER VI1		1022		// Mvia1
+LAYER MAP	48	DATATYPE	0	1023
+LAYER ME2		1023		// Metal2
+LAYER MAP	49	DATATYPE	0	1024
+LAYER VI2		1024		// Mvia2
+LAYER MAP	50	DATATYPE	0	1025
+LAYER ME3		1025		// Metal3
+LAYER MAP	51	DATATYPE	0	1026
+LAYER VI3		1026		// Mvia3
+LAYER MAP	52	DATATYPE	0	1027
+LAYER ME4		1027		// Metal4
+LAYER MAP	53	DATATYPE	0	1028
+LAYER VI4		1028		// Mvia4
+LAYER MAP	54	DATATYPE	0	1029
+LAYER ME5		1029		// Metal5
+LAYER MAP	55	DATATYPE	0	1030
+LAYER VI5		1030		// Mvia5
+LAYER MAP	56	DATATYPE	0	1031
+LAYER ME6		1031		// Metal6
+LAYER MAP	57	DATATYPE	0	1032
+LAYER VI6		1032		// Mvia6
+LAYER MAP	58	DATATYPE	0	1033
+LAYER ME7		1033		// Metal7
+LAYER MAP	65	DATATYPE	0	1034
+LAYER MMC		1034		// Metal Cap (top Plate)
+LAYER MAP	66	DATATYPE	0	1035
+LAYER PAD		1035		// Pad
+LAYER MAP	70	DATATYPE	0	1068
+LAYER XOPCD		    1068		// Diffusion OPC Block
+LAYER MAP	71	DATATYPE	0	1077
+LAYER XOPCP		    1077		// Poly OPC Block
+LAYER MAP	72	DATATYPE	0	1086
+LAYER XOPCM1    	    1086		// Metal1 OPC Block
+LAYER MAP	72	DATATYPE	7	1036
+LAYER M1SLMK		1036		// Metal1 Slot Marking Layer
+LAYER MAP	73	DATATYPE	7	1037
+LAYER M2SLMK		1037		// Metal2 Slot Marking Layer
+LAYER MAP	74	DATATYPE	7	1038
+LAYER M3SLMK		1038		// Metal3 Slot Marking Layer
+LAYER MAP	75	DATATYPE	7	1039
+LAYER M4SLMK		1039		// Metal4 Slot Marking Layer
+LAYER MAP	76	DATATYPE	7	1040
+LAYER M5SLMK		1040		// Metal5 Slot Marking Layer
+LAYER MAP	77	DATATYPE	7	1041
+LAYER M6SLMK		1041		// Metal6 Slot Marking Layer
+LAYER MAP	78	DATATYPE	7	1042
+LAYER M7SLMK		1042		// Metal7 Slot Marking Layer
+LAYER MAP	81	DATATYPE	0	1043
+LAYER RSYMBOL		1043		// Duffusion Resistor Marker
+LAYER MAP	82	DATATYPE	0	1044
+LAYER PSYMBOL		1044		// Poly-Resistor Marker
+// LAYER MAP	83	DATATYPE	0	1045
+// LAYER WSYMBOL		1045		// Well-Resistor Marker  // Comment BY C.C. Chang  ,Please use layer NWR(40)
+LAYER MAP	85	DATATYPE	0	1046
+LAYER GTEXT		1046		// Generic LVS text
+LAYER MAP	87	DATATYPE	0	1047
+LAYER IOMARK		1047		// I/O Area Marker
+LAYER MAP	88	DATATYPE	0	1048
+LAYER FUSEMARK		1048		// Fuse Area Marker
+LAYER MAP	89	DATATYPE	0	1049
+LAYER FLPMARK		1049		// Flip Chip Bump Pad Area Marker
+LAYER MAP	90	DATATYPE	0	1050
+LAYER PADMARK		1050		// PAD Area Marker
+LAYER MAP	91	DATATYPE	0	1051
+LAYER IOID		1051		// Marker for ESD protection
+LAYER MAP	93	DATATYPE	0	1052
+LAYER ROM_ID		1052		// ROM Marker
+LAYER MAP	94	DATATYPE	20	1053
+LAYER DP_ID		1053		// Dual Port SRAM Marker
+LAYER MAP	94	DATATYPE	21	1054
+LAYER DP_ID1		1054		// Dual Port SRAM Marker
+LAYER MAP	94	DATATYPE	22	1055
+LAYER DP_ID2		1055		// Dual Port SRAM Marker
+LAYER MAP	95	DATATYPE	0	1056
+LAYER BLSP_ID1		1056		// Borderless Single Port SRAM Marker
+LAYER MAP	95	DATATYPE	20	1057
+LAYER BLSP_ID2		1057		// Borderless Single Port SRAM Marker
+LAYER MAP	95	DATATYPE	21	1058
+LAYER BLSPLP		1058		// Low power sram  
+LAYER MAP	96	DATATYPE	0	1058
+LAYER XDIODE		1058		// Ignore Diode Device Marker
+LAYER MAP	97	DATATYPE	0	1059
+LAYER IRAM		1059		// SRAM Cell Array Marker
+LAYER MAP	98	DATATYPE	0	1060
+LAYER BDSP_ID		1060		// Bordered Single Port
+LAYER MAP	99	DATATYPE	0	1061
+LAYER SEPGND		1061		// For LVS Purpose
+LAYER MAP	100	TEXTTYPE	0	1062
+LAYER PO_TEXT		1062		// Poly Text
+LAYER MAP	100	DATATYPE	37	1063
+LAYER VINST_B		1063		// For LVS Prupose
+LAYER MAP	101	TEXTTYPE	0	1064
+LAYER M1_TEXT		1064		// Metal1 Text
+LAYER MAP	102	TEXTTYPE	0	1065
+LAYER M2_TEXT		1065		// Metal2 Text
+LAYER MAP	103	TEXTTYPE	0	1066
+LAYER M3_TEXT		1066		// Metal3 Text
+LAYER MAP	104	TEXTTYPE	0	1067
+LAYER M4_TEXT		1067		// Metal4 Text
+LAYER MAP	105	TEXTTYPE	0	1068
+LAYER M5_TEXT		1068		// Metal5 Text
+LAYER MAP	106	TEXTTYPE	0	1069
+LAYER M6_TEXT		1069		// Metal6 Text
+LAYER MAP	107	TEXTTYPE	0	1070
+LAYER M7_TEXT		1070		// Metal7 Text
+LAYER MAP	108	TEXTTYPE	0	1071
+LAYER M8_TEXT		1071		// Metal8 Text
+LAYER MAP	111	DATATYPE	30	1072
+LAYER MRSYMBOL		1072		// Metal Resistor Marker layer
+LAYER MAP	111	DATATYPE	33	1073
+LAYER SIZE1		1073		// Mark layer for device mapping
+LAYER MAP	111	DATATYPE	34	1074
+LAYER SIZE10		1074		// Mark layer for device mapping
+LAYER MAP	112	DATATYPE	30	1075
+LAYER CSYMBOL		1075		// Capacitor Marker layer
+LAYER MAP	112	DATATYPE	33	1076
+LAYER SIZE2		1076		// Mark layer for device mapping
+LAYER MAP	112	DATATYPE	34	1077
+LAYER SIZE11		1077		// Mark layer for device mapping
+LAYER MAP	112	DATATYPE	36	1078
+LAYER MCAP		1078		// Metal Dummy Block for Metal Cap.
+LAYER MAP	113	DATATYPE	30	1079
+LAYER BJTSYMBOL		1079		// BJT Bipolar Transistor Marker layer
+LAYER MAP	113	DATATYPE	33	1080
+LAYER SIZE3		1080		// Mark layer for device mapping
+LAYER MAP	113	DATATYPE	34	1081
+LAYER SIZE12		1081		// Mark layer for device mapping
+LAYER MAP	114	DATATYPE	0	1082
+LAYER DIODEID		1082		// For LVS Prupose
+LAYER MAP	114	DATATYPE	30	1083
+LAYER DSYMBOL		1083		// Diode Marker layer
+LAYER MAP	114	DATATYPE	33	1084
+LAYER SIZE4		1084		// Mark layer for device mapping
+LAYER MAP	115	DATATYPE	30	1085
+LAYER DIOBLK		1085		// DRC Diode block layer
+LAYER MAP	115	DATATYPE	33	1086
+LAYER SIZE5		1086		// Mark layer for device mapping
+LAYER MAP	116	DATATYPE	33	1087
+LAYER SIZE6		1087		// Mark layer for device mapping
+LAYER MAP	117	DATATYPE	30	1088
+LAYER LSYMBOL		1088		// Inductor Marker layer
+LAYER MAP	117	DATATYPE	33	1089
+LAYER SIZE7		1089		// Mark layer for device mapping
+LAYER MAP	117	DATATYPE	36	1090
+LAYER IND		1090		// Metal dummy block Layer for Inductor
+LAYER MAP	118	DATATYPE	30	1091
+LAYER MMSYMBOL		1091		// Mixed Mode Device Marker layer
+LAYER MAP	118	DATATYPE	33	1092
+LAYER SIZE8		1092		// Mark layer for device mapping
+LAYER MAP	119	DATATYPE	30	1093
+LAYER RFSYMBOL		1093		// RF Device Marker layer
+LAYER MAP	119	DATATYPE	33	1094
+LAYER SIZE9		1094		// Mark layer for device mapping
+LAYER MAP	141	DATATYPE	0	1095
+LAYER HTNW		1095		// For DRC Purpose
+
+
+//*************************
+//*** Derived layers ******
+//*************************
+ROM = COPY ROM_ID 
+DP = COPY DP_ID 
+BLSP = COPY BLSP_ID1 
+BLSP1 = COPY BLSP_ID2 
+DP2  = COPY DP_ID2
+//BDSP = COPY BDSP_ID 
+BDSP = BDSP_ID OR DP2
+DP1 = COPY DP_ID1
+
+SPRAM = BDSP OR BLSP
+BDDP = BDSP OR DP
+BLDP = BLSP OR DP
+SRAM = SPRAM OR DP
+
+IO = IOMARK OR IOID
+
+PDIF1_logic = PDIF1 NOT ( (SRAM OR DP1) OR BLSP1) 
+PDIF1_ram = PDIF1 AND ( (SRAM OR DP1) OR BLSP1)
+
+NDIF1_logic = NDIF1 NOT ( (SRAM OR DP1) OR BLSP1)
+NDIF1_ram = NDIF1 AND ( (SRAM OR DP1) OR BLSP1)
+
+LAYOUT TOP LAYER PAD ME6 VI5 ME5 VI4 ME4 VI3 ME3 VI2 ME2 VI1 ME1
+//===========================
+//===  Setup Environment  ===
+//===========================
+//
+ 
+LAYOUT DEPTH  ALL
+LAYOUT SYSTEM GDSII
+ 
+RESOLUTION  1
+PRECISION  1000
+ 
+UNIT CAPACITANCE FF
+UNIT LENGTH      U
+UNIT RESISTANCE  OHM
+UNIT TIME        US
+ 
+FLAG ACUTE   YES
+FLAG OFFGRID YES
+//FLAG SKEW    YES
+ 
+//================================
+//===  Setup Defaults for DRC  ===
+//================================
+//
+LAYOUT PATH "~/CIC_Calibre_test/tempk/test01.gds"
+LAYOUT PRIMARY "test01"
+ 
+DRC CHECK TEXT       COMMENTS RFI   
+DRC KEEP EMPTY       NO
+DRC MAXIMUM RESULTS  1000
+DRC MAXIMUM VERTEX   199
+DRC RESULTS DATABASE "./test01.db" ASCII
+DRC SUMMARY REPORT   "./test01.sum"
+DRC TOLERANCE FACTOR .003
+// *************************************************************
+// you can comment one or more lines to run these opional checks
+// with basic rule check, or change DRC UNSELECT CHECK ... to 
+// DRC SLELECT CHECK ... to run one or more optional checks only
+// *************************************************************
+//DRC UNSELECT CHECK METOP_20KA
+//DRC UNSELECT CHECK METOP_8KA
+DRC UNSELECT CHECK MAX_MET_SPACE
+DRC UNSELECT CHECK METAL_DENSITY
+DRC UNSELECT CHECK Metal_slot
+DRC UNSELECT CHECK DIE_CORNER_99
+DRC UNSELECT CHECK DIE_CORNER_100
+DRC UNSELECT CHECK RF_RULES
+//======================================
+//===  Map TEXT layer to port names  ===
+//======================================
+//
+TEXT DEPTH PRIMARY
+TEXT LAYER PO_TEXT M1_TEXT M2_TEXT M3_TEXT M4_TEXT M5_TEXT M6_TEXT
+
+ATTACH PO_TEXT PO1
+ATTACH M1_TEXT ME1
+ATTACH M2_TEXT ME2
+ATTACH M3_TEXT ME3
+ATTACH M4_TEXT ME4
+ATTACH M5_TEXT ME5
+ATTACH M6_TEXT ME6
+
+VIRTUAL CONNECT COLON YES
+VIRTUAL CONNECT NAME VSS GND VBB VCC VDD VDD18 VDD33
+//==================================================
+//===  Establish Layer Connectivity for DRC Only ===
+//==================================================
+//
+CONNECT PAD  ME6
+CONNECT ME6 ME5 BY VI5
+CONNECT ME5 ME4 BY VI4
+CONNECT ME4 ME3 BY VI3
+CONNECT ME3 ME2 BY VI2
+CONNECT ME2 ME1 BY VI1
+CONNECT ME1 PO1 NTAP PTAP BY CONT
+CONNECT NTAP NWELL
+
+//===================================================================
+//===  Defined types from combinations of layers (DO NOT MODIFY)  ===
+//===================================================================
+ 
+DRC:1     = EXTENT
+BULK      = SIZE DRC:1 BY 1.0
+//
+//   DEFINE NWELL AND NWELL RESISTOR
+//
+RNWELL    = NWEL INTERACT     NWR
+NWELL     = NWEL NOT INTERACT NWR 
+//
+//   DEFINE MOS S/D AND P/N WELL TAP
+//
+DIFF_NW = DIFF NOT OUTSIDE NWEL 
+DIFF_PS = DIFF OUTSIDE NWEL 
+
+DIFF_NW_logic = DIFF_NW NOT ( (SRAM OR DP1) OR BLSP1)
+DIFF_NW_ram   = DIFF_NW AND ( (SRAM OR DP1) OR BLSP1)
+
+DIFF_TW = DIFF_NW NOT OUTSIDE TWEL
+DIFF_NT = DIFF_NW OUTSIDE TWEL
+DIFF_NT_logic = DIFF_NT NOT ( (SRAM OR DP1) OR BLSP1)
+
+PTAP      = ( PPLUS AND DIFF_PS ) OR ( DIFF_TW AND PPLUS )
+NDIF      = ( DIFF_PS NOT PPLUS ) OR ( DIFF_TW NOT PPLUS )
+PDIF      = PPLUS AND DIFF_NT
+NTAP      = DIFF_NT NOT PPLUS
+
+PDIF3     = PDIF INTERACT TG
+PDIF1     = PDIF NOT INTERACT TG
+NDIF3     = NDIF INTERACT TG
+NDIF1     = NDIF NOT INTERACT TG  
+
+BUT_PPLUS = PPLUS INSIDE EDGE DIFF
+PSD       = PDIF NOT PO1
+NSD       = NDIF NOT PO1
+BUT_PS    = PSD TOUCH NTAP
+BUT_NTAP  = NTAP TOUCH PSD
+BUT_NS    = NSD TOUCH PTAP
+BUT_PTAP  = PTAP TOUCH NSD
+
+CO_PSD     =PSD ENCLOSE DIFCNT
+CO_NSD    = NSD ENCLOSE DIFCNT
+CO_SD     = CO_PSD OR CO_NSD
+//
+//   DEFINE GATE PO1 AND INTERCONNECT PO1 
+//
+GATE      = PO1 AND DIFF
+GATE_W    = PO1 COIN INSIDE EDGE GATE
+GATE1_W   = GATE_W NOT INSIDE EDGE TG
+GATE3_W   = GATE_W     INSIDE EDGE TG
+
+GATEPO1   = PO1 INTERACT GATE
+GPOCONT   = CONT INTERACT GATEPO1
+   
+EXPOL     = PO1  NOT DIFF
+EXPO_E    = PO1 NOT COIN INSIDE EDGE GATE
+INTPOL    = EXPOL NOT INTERACT CONT   
+
+SPO       = SIZE PO1 BY -0.12
+WPO       = SIZE SPO  BY 0.12 TRUNCATE 0.12
+
+GATE_Wa   = GATE_W NOT COIN OUTSIDE EDGE CO_SD
+GATE_Wb   = GATE_W     COIN OUTSIDE EDGE CO_SD
+
+WGATE_Wa  = GATE_Wa COIN INSIDE EDGE WPO
+WGATE_Wb  = GATE_Wb COIN INSIDE EDGE WPO
+TGATE_Wa  = GATE_Wa NOT COIN INSIDE EDGE WPO
+TGATE_Wb  = GATE_Wb NOT COIN INSIDE EDGE WPO
+
+WEXPO_E   = EXPO_E COIN INSIDE EDGE WPO
+TEXPO_E   = EXPO_E NOT COIN INSIDE EDGE WPO
+//
+//   DEFINE PO1 CONT AND DIFF CONT
+//
+POLCNT    = CONT OUTSIDE DIFF
+DIFCNT    = CONT NOT OUTSIDE DIFF
+DIFCNT3   = DIFCNT     INTERACT TG
+DIFCNT1   = DIFCNT NOT INTERACT TG
+//For High Resistor PO1
+HRPO1  = PO1 INTERACT HR
+PURPO1 = PO1 NOT HRPO1
+
+//SABPO1 = SAB ENCLOSURE HR
+SABPO1 = HRPO1 INSIDE EDGE SAB
+HRCONT  = CONT AND HR
+//
+
+//*******************
+//***  DRC Rules  ***
+//*******************
+
+Off_Grid {
+   @ Vertice is drawn off-grid.
+   DRAWN OFFGRID
+}
+//SkewEdges {
+//   @ Safety: Edge violates 45 or 90 degrees
+//   DRAWN SKEW
+//}
+
+//MET6_NO_L = ME6 not IND
+//SkewEdge {
+//  ANGLE  NWEL  >0<45
+//  ANGLE  DIFF    >0<45
+//  ANGLE  TWEL   >0<45
+//  ANGLE  VTPL    >0<45
+//  ANGLE  VTPHL   >0<45
+//  ANGLE  VTNL    >0<45
+//  ANGLE  VTNI    >0<45
+//  ANGLE  VTNHL   >0<45
+//  ANGLE  PESD    >0<45
+//  ANGLE  HR      >0<45
+//  ANGLE  TG      >0<45
+//  ANGLE  PO1     >0<45
+//  ANGLE  NPLUS   >0<45
+//  ANGLE  PPLUS   >0<45
+//  ANGLE  SAB     >0<45
+//  ANGLE  CONT    >0<45
+//  ANGLE  VARACT  >0<45
+//  ANGLE  ME1    >0<45
+//  ANGLE  VI1    >0<45
+//  ANGLE  ME2    >0<45
+//  ANGLE  VI2    >0<45
+//  ANGLE  ME3    >0<45
+//  ANGLE  VI3    >0<45
+//  ANGLE  ME4    >0<45
+//  ANGLE  VI4    >0<45
+//  ANGLE  ME5    >0<45
+//  ANGLE  MMC     >0<45
+//  ANGLE  VI5    >0<45
+//  ANGLE  MET6_NO_L >0<45
+//  ANGLE  VI6    >0<45
+//  ANGLE  ME7    >0<45
+//  ANGLE  PAD     >0<45
+//  ANGLE  NWR    >0<45
+//  ANGLE  ROM_ID  >0<45
+//  ANGLE  DP_ID   >0<45
+//  ANGLE  BLSP_ID1 >0<45
+//  ANGLE  BLSP_ID2 >0<45
+//  ANGLE  BDSP_ID >0<45
+//  ANGLE  DP_ID1  >0<45
+//  ANGLE  DP_ID2  >0<45
+//  ANGLE  IOMARK  >0<45
+//  ANGLE  IOID    >0<45
+//  ANGLE  M1SLMK  >0<45
+//  ANGLE  M2SLMK  >0<45
+//  ANGLE  M3SLMK  >0<45
+//  ANGLE  M4SLMK  >0<45
+//  ANGLE  M5SLMK  >0<45
+//  ANGLE  M6SLMK  >0<45
+//  ANGLE  M7SLMK  >0<45
+//
+//  ANGLE  NWEL  >45<90
+//  ANGLE  DIFF    >45<90
+//  ANGLE  TWEL   >45<90
+//  ANGLE  VTPL    >45<90
+//  ANGLE  VTPHL   >45<90
+//  ANGLE  VTNL    >45<90
+//  ANGLE  VTNI    >45<90
+//  ANGLE  VTNHL   >45<90
+//  ANGLE  PESD    >45<90
+//  ANGLE  HR      >45<90
+//  ANGLE  TG      >45<90
+//  ANGLE  PO1     >45<90
+//  ANGLE  NPLUS   >45<90
+//  ANGLE  PPLUS   >45<90
+//  ANGLE  SAB     >45<90
+//  ANGLE  CONT    >45<90
+//  ANGLE  VARACT  >45<90
+//  ANGLE  ME1    >45<90
+//  ANGLE  VI1    >45<90
+//  ANGLE  ME2    >45<90
+//  ANGLE  VI2    >45<90
+//  ANGLE  ME3    >45<90
+//  ANGLE  VI3    >45<90
+//  ANGLE  ME4    >45<90
+//  ANGLE  VI4    >45<90
+//  ANGLE  ME5    >45<90
+//  ANGLE  MMC     >45<90
+//  ANGLE  VI5    >45<90
+//  ANGLE  MET6_NO_L >45<90
+//  ANGLE  VI6    >45<90
+//  ANGLE  ME7    >45<90
+//  ANGLE  PAD     >45<90
+//  ANGLE  NWR    >45<90
+//  ANGLE  ROM_ID  >45<90
+//  ANGLE  DP_ID   >45<90
+//  ANGLE  BLSP_ID1 >45<90
+//  ANGLE  BLSP_ID2 >45<90
+//  ANGLE  BDSP_ID >45<90
+//  ANGLE  DP_ID1  >45<90
+//  ANGLE  DP_ID2  >45<90
+//  ANGLE  IOMARK  >45<90
+//  ANGLE  IOID    >45<90
+//  ANGLE  M1SLMK  >45<90
+//  ANGLE  M2SLMK  >45<90
+//  ANGLE  M3SLMK  >45<90
+//  ANGLE  M4SLMK  >45<90
+//  ANGLE  M5SLMK  >45<90
+//  ANGLE  M6SLMK  >45<90
+//  ANGLE  M7SLMK  >45<90
+//}
+
+
+//==============================================
+//===  Diffusion (Active) Layer Rules 	  ===
+//==============================================
+
+DIFF.W1.DIFF.W2 {@ Minimum dimension of an Active region is 0.25um
+   E = INT DIFF < 0.25 ABUT>0<90 SINGULAR REGION
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))   
+}
+
+DIFF.S1.DIFF.S2 {@ Minimum space between two Active regions is 0.3um 
+   E = EXT DIFF < 0.3 ABUT>0<90 REGION
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+DIFF.S3.18 {@ Minimum NWELL to a N+ diffusion(1.8V) spacing is 0.43um 
+   E = EXT NWEL NDIF1_logic < 0.43 ABUT<90 OVERLAP SINGULAR REGION
+   E NOT BLSPLP
+}
+DIFF.S3.33 {@ Minimum NWELL to a N+ diffusion(3.3V) spacing is 1.0um 
+   EXT NWEL NDIF3 < 0.9 ABUT<90 OVERLAP SINGULAR REGION
+}
+DIFF.O1 {@ Minimum NWELL overlap N+ diffusion is 0.25um
+   E = ENC NTAP NWEL < 0.25 ABUT<90 SINGULAR OVERLAP REGION
+   E NOT BLSP
+}
+DIFF.S4 {@ Minimum NWELL to P+ diffusion is 0.25um
+   EXT NWEL PTAP < 0.25 ABUT<90 SINGULAR OVERLAP REGION
+}
+DIFF.S5 {@ Minimum TWELL to N+ diffusion is 0.25um
+   EXT NTAP TWEL < 0.25 ABUT<90 SINGULAR OVERLAP REGION
+}
+DIFF.S6.18 {@ Minimum TWELL overlap N+ diffusion(1.8V) spacing is 0.5um 
+   ENC NDIF1 TWEL < 0.5 ABUT<90 OVERLAP SINGULAR REGION
+}
+DIFF.S6.33 {@ Minimum TWELL overlap N+ diffusion(3.3V) spacing is 0.9um 
+   ENC NDIF3 TWEL < 0.9 ABUT<90 OVERLAP SINGULAR REGION
+}
+DIFF.O2.18 {@ Minimum NWELL overlap P+ diffusion(1.8V) is 0.5um
+   E = ENC PDIF1_logic NWEL < 0.5 ABUT<90 SINGULAR OVERLAP REGION
+   E NOT BLSPLP
+}
+DIFF.O2.33 {@ Minimum NWELL overlap P+ diffusion(3.3V) is 0.9um
+   ENC PDIF3 NWEL < 0.9 ABUT<90 SINGULAR OVERLAP REGION
+}
+DIFF.O3.18 {@ Minimum TWELL overlap N+ diffusion(1.8V) spacing is 0.5um 
+   ENC NDIF1 TWEL < 0.5 ABUT<90 OVERLAP SINGULAR REGION
+}
+DIFF.O3.33 {@ Minimum TWELL overlap N+ diffusion(3.3V) spacing is 0.9um 
+   ENC NDIF3 TWEL < 0.9 ABUT<90 OVERLAP SINGULAR REGION
+}
+
+DIFF.O4 {@ Minimum TWELL overlap P+ diffusion is 0.25um
+   ENC PTAP TWEL < 0.25 ABUT<90 SINGULAR OVERLAP REGION
+}
+
+//===========================
+//===  N-Well Rules 	  ==
+//===========================
+
+NW.W1 {@ Minimum dimension of an N-Well region is 1um
+   INT NWELL < 1 ABUT>0<90 SINGULAR REGION
+ }
+NW.W2 {@ Minimum dimension of an N-Well resistor region is 1.3um
+   INT RNWELL < 1.3 ABUT>0<90 SINGULAR REGION 
+}
+NW.W3 {@ Maximum NWELL width for resistor is 20 um
+   x = NWR COIN INSIDE EDGE RNWELL
+   y = EXPAND EDGE x INSIDE BY 10 CORNER FILL
+   z = RNWELL AND NWR
+   z NOT y
+}
+
+
+HOT_WELL_F = NWELL NOT INTERACT NTAP
+COLD_WELL_F= NWELL INTERACT     NTAP
+CNWELL18_F = COLD_WELL_F NOT INTERACT TG
+CNWELL33_F = COLD_WELL_F INTERACT     TG
+
+NW.S1 {@ Minimum N-Well N-Well spacing for equal-potential is 1.6
+   EXT NWEL < 1.6 ABUT>0<90 REGION
+}
+NW.S2.18 {@ Minium N-Well to N-Well spacing of non-potential(1.8V device) = 1.5
+   EXT NWELL < 1.5 ABUT>0<90 NOT CONNECTED REGION
+}
+NW.S2.33 {@ Minimum Nwell to N-Well spacing of non-potential(3.3V device) = 1.8
+  HNWELL = (NWELL INTERACT PDIF3) OR (NWELL INTERACT (NTAP INTERACT TG))
+  HNWELL_CONNECTED = STAMP HNWELL BY NWELL
+  EXT HNWELL_CONNECTED NWELL <1.8 ABUT>0<90 NOT CONNECTED REGION
+} 
+NW.S3 {@ Minimum space between two N-well resistor regions is 2.3um
+   EXT RNWELL < 2.3 ABUT>0<90 REGION 
+}
+NW.S4 {@ Minimum Nwell spacing to Nwell resistor is 2.3 um
+   EXT RNWELL NWELL < 2.3 ABUT<90 REGION
+}
+
+//======================================
+//===  Deep-NWELL                    ===
+//======================================
+
+TWELL33 = TWEL INTERACT NDIF3
+TWELL18 = TWEL NOT TWELL33
+
+DNW.W1 {@ Minimum width of Deep-NWELL region is 1um
+   INT TWEL < 1 ABUT>0<90 SINGULAR REGION
+}
+
+DNW.S1 {@ Minimum space between two Deep-NWELL regions is 1.5um
+   EXT TWEL < 1.5 ABUT>0<90 REGION
+}
+DNW.S2.18 {@ Minimum space between two Deep-NWELL(1.8V) regions is 1.5um
+   EXT TWELL18 < 1.5 ABUT>0<90  REGION
+}
+DNW.S2.33 {@ Minimum space between two Deep-NWELL(3.3V) regions is 2.0um
+   EXT TWELL33  TWEL  < 2.0 ABUT>0<90  REGION
+}
+DNW.O1 {@ Minimum NWELL overlap Deep-NWELL is 1.2um
+   ENC TWEL NWEL < 1.2 ABUT SINGULAR REGION OUTSIDE ALSO
+}
+//======================================
+//===  VTPL (Vtpl Rules)         === 
+//======================================
+
+GATE1_VTPL     = GATE1_W     INSIDE EDGE VTPL
+GATE1_NOT_VTPL = GATE1_W NOT INSIDE EDGE VTPL
+
+VTPL.W1 {@ Minimum width of poly(PMOS) region is 0.25um
+   INT GATE1_VTPL < 0.25 ABUT>0<90 REGION
+
+}
+VTPL.W2 {@ Minimum width of VTPL region is 0.5um
+   INT VTPL < 0.5 ABUT>0<90 SINGULAR REGION
+}
+VTPL.S1 {@ Minimum space between two VTPL regions is 0.5um
+   EXT VTPL < 0.5 ABUT>0<90 REGION
+}
+VTPL.O1 {@ Minimum VTPL overlap Diffusion of 1.8V device is 0.32um
+   ENC DIFF VTPL < 0.32 ABUT<90 SINGULAR REGION
+}
+VTPL.S2 {@ Minimum VTPL to unrelated Diffusion spacing is 0.32um
+   EXT VTPL DIFF < 0.32 ABUT<90 SINGULAR REGION
+}
+VTPL.O2 {@ Minimum VTPL overlap Poly of related device is 0.45um
+   ENC GATE1_VTPL VTPL < 0.45 ABUT<90 REGION
+}
+VTPL.S3 {@ Minimum VTPL to unrelated Poly spacing(in diffusion region) is 0.45um
+   EXT VTPL GATE1_NOT_VTPL < 0.45 ABUT<90 REGION
+}
+//======================================
+//===  VTPHL  Rules       === 
+//======================================
+ 
+GATE3_VTPHL     = GATE3_W     INSIDE EDGE VTPHL
+GATE3_NOT_VTPHL = GATE3_W NOT INSIDE EDGE VTPHL
+ 
+VTPHL.W1 {@ Minimum width of poly(PMOS) region is 0.45um
+   E = INT PO1 < 0.45 SINGULAR REGION
+  ( E AND VTPHL ) INTERACT ( PPLUS AND DIFF )
+
+}
+VTPHL.W2 {@ Minimum width of VTPHL region is 0.5um
+   INT VTPHL < 0.5 ABUT>0<90 SINGULAR REGION
+}
+VTPHL.S1 {@ Minimum space between two VTPHL regions is 0.5um
+   EXT VTPHL < 0.5 ABUT>0<90 REGION
+}
+VTPHL.O1 {@ Minimum VTPHL overlap Diffusion of 3.3V device is 0.32um
+   ENC DIFF VTPHL < 0.32 ABUT<90 SINGULAR REGION
+}
+VTPHL.S2 {@ Minimum VTPHL to unrelated Diffusion spacing is 0.32um
+   EXT VTPHL DIFF < 0.32 ABUT<90 SINGULAR REGION
+}
+VTPHL.O2 {@ Minimum VTPHL overlap Poly of related device is 0.45um
+   ENC GATE3_VTPHL VTPHL < 0.45 ABUT<90 REGION
+}
+VTPHL.S3 {@ Minimum VTPHL to unrelated Poly spacing(in diffusion region) is 0.45um
+   EXT PO1 VTPHL < 0.45 ABUT SINGULAR REGION
+}
+//======================================
+//===  VTNL  Rules  	             === 
+//======================================
+
+GATE1_VTNL     = GATE1_W     INSIDE EDGE VTNL
+GATE1_NOT_VTNL = GATE1_W NOT INSIDE EDGE VTNL
+GATE3_VTNL     = GATE3_W     INSIDE EDGE VTNL 
+GATE3_NOT_VTNL = GATE3_W NOT INSIDE EDGE VTNL
+
+VTNL.W1.18 {@ Minimum width of poly(1.8V PMOS) region is 0.25um
+   INT GATE1_VTNL < 0.25 ABUT>0<90 REGION
+}
+VTNL.W1.33 {@ Minimum width of poly(3.3V PMOS) region is 0.45um
+   INT GATE3_VTNL < 0.45 ABUT>0<90 REGION
+}
+VTNL.W2 {@ Minimum width of VTNL region is 0.5um
+   INT VTNL < 0.5 ABUT>0<90 SINGULAR REGION
+}
+VTNL.S1 {@ Minimum space between two VTNL regions is 0.5um
+   EXT VTNL < 0.5 ABUT>0<90 REGION
+}
+VTNL.O1 {@ Minimum VTNL overlap Diffusion is 0.32um
+   ENC DIFF VTNL < 0.32 ABUT<90 SINGULAR REGION
+}
+VTNL.S2 {@ Minimum VTNL to unrelated Diffusion spacing is 0.32um
+   EXT VTNL DIFF < 0.32 ABUT<90 SINGULAR REGION
+}
+VTNL.O2 {@ Minimum VTNL overlap Poly on diffusion of related device is 0.45um
+   ENC GATE1_VTNL VTNL < 0.45 ABUT<90 REGION
+   ENC GATE3_VTNL VTNL < 0.45 ABUT<90 REGION
+}
+VTNL.S3 {@ Minimum VTPL to unrelated Poly spacing(in diffusion region) is 0.45um
+   EXT VTNL GATE1_NOT_VTNL < 0.45 ABUT<90 REGION
+   EXT VTNL GATE3_NOT_VTNL < 0.45 ABUT<90 REGION
+}
+//======================================
+//===  VTNI  Rules		      === 
+//======================================
+
+GATE1_VTNI     = GATE1_W     INSIDE EDGE VTNI
+GATE1_NOT_VTNI = GATE1_W NOT INSIDE EDGE VTNI
+
+VTNI.W1 {@ Minimum width of poly(NMOS) region is 0.32um
+   INT GATE1_VTNI < 0.32 ABUT>0<90 REGION
+}
+VTNI.W2 {@ Minimum width of VTNI region is 0.5um
+   INT VTNI < 0.5 ABUT>0<90 SINGULAR REGION
+}
+VTNI.S1 {@ Minimum space between two VTNI regions is 0.5um
+   EXT VTNI < 0.5 ABUT>0<90 REGION
+}
+VTNI.O1 {@ Minimum VTNI overlap Diffusion is 0.32um
+   ENC DIFF VTNI < 0.32 ABUT<90 SINGULAR REGION
+}
+VTNI.S2 {@ Minimum VTNI to unrelated Diffusion spacing is 0.32um
+   EXT VTNI DIFF < 0.32 ABUT<90 SINGULAR REGION
+}
+VTNI.O2 {@ Minimum VTNI overlap Poly on diffusion of related device is 0.45um
+   ENC GATE1_VTNI VTNI < 0.45 ABUT<90 REGION
+}
+VTNI.S3 {@ Minimum VTNI to unrelated Poly spacing(in diffusion region) is 0.45um
+   EXT VTNI GATE1_NOT_VTNI < 0.45 ABUT<90 REGION
+}
+//====================================== 
+//===  VTNHL  Rules  		    ===  
+//======================================
+ 
+GATE3_VTNHL     = GATE3_W     INSIDE EDGE VTNHL
+GATE3_NOT_VTNHL = GATE3_W NOT INSIDE EDGE VTNHL
+ 
+VTNHL.W1 {@ Minimum width of poly(NMOS) region is 0.45um
+    E = INT PO1 < 0.45 SINGULAR REGION
+  ( E AND VTNHL ) INTERACT ( NPLUS AND DIFF )
+}
+VTNHL.W2 {@ Minimum width of VTNHL region is 0.5um
+   INT VTNHL < 0.5 ABUT>0<90 SINGULAR REGION
+}
+VTNHL.S1 {@ Minimum space between two VTNHL regions is 0.5um
+   EXT VTNHL < 0.5 ABUT>0<90 REGION
+}
+VTNHL.O1 {@ Minimum VTNHL overlap Diffusion is 0.28um
+   ENC DIFF VTNHL < 0.28 ABUT<90 SINGULAR REGION
+}
+VTNHL.S2 {@ Minimum VTNHL to unrelated Diffusion spacing is 0.28um
+   EXT VTNHL DIFF < 0.28 ABUT<90 SINGULAR REGION
+}
+VTNHL.O2 {@ Minimum VTNHL overlap Poly on diffusion of related device is 0.5um
+   ENC GATE3_VTNHL VTNHL < 0.5 ABUT<90 REGION
+}
+VTNHL.S3 {@ Minimum VTNHL to unrelated Poly spacing(in diffusion region) is 0.5um
+   EXT PO1 VTNHL <0.5 ABUT SINGULAR REGION
+}
+//======================================
+//===  OD2 (3.3v oxide)  Rules       ===
+//======================================
+ 
+OD2.W1 {@ Minimum width of OD2 region is 0.5um
+   INT TG < 0.5 ABUT>0<90 SINGULAR REGION
+}
+ 
+OD2.S1 {@ Minimum space between two OD2 regions is 0.5um
+   EXT TG < 0.5 ABUT>0<90 REGION
+}
+ 
+OD2.O1 {@ Minimum OD2 overlap Diffusion of 3.3V device is 0.28um
+   ENC DIFF TG < 0.28 ABUT<90 SINGULAR REGION
+}
+ 
+OD2.S2 {@ Minimum OD2 to unrelated Diffusion spacing is 0.28um
+   EXT TG DIFF < 0.28 ABUT<90 SINGULAR REGION
+}
+
+OD2.O2 {@ Minimum OD2 overlap Poly of 3.3V device is 0.38um
+   ENC GATE3_W TG < 0.38 ABUT<90 OPPOSITE REGION
+   TG INSIDE EDGE GATE
+}
+
+OD2.S3 {@ Minimum OD2 to unrelated Poly spacing(in diffusion region) is 0.38um
+   EXT GATE1_W TG < 0.38 ABUT<90 REGION
+}
+//==========================
+//===  Po1 Rules         ===
+//==========================
+
+
+PO1.W1.18.PO.W2 {@ Minimum PO1 width for 1.8V NMOS or PMOS or interconnect is 0.18um
+   E = INT PO1 < 0.18 ABUT>0<90 SINGULAR REGION
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+
+PO1.W1.33 {@ Minimum PO1 width for 3.3V NMOS or PMOS is 0.3um
+   INT GATE3_W < 0.3 ABUT>0<90 REGION
+}
+
+PO1.S1.a {@ Minimum Poly spacing on diffusion regions without contact 
+         @ poly width < 0.24um is 0.25um
+   E = EXT TGATE_Wa < 0.25 ABUT>0<90 REGION 
+   E NOT (BLSP OR (BLSP1 OR BLSPLP))
+}
+PO1.S1.b {@ Minimum Poly spacing on diffusion regions without contact 
+         @ poly width >= 0.24um is 0.3um
+   E = EXT WGATE_Wa GATE_W < 0.3 ABUT>0<90 REGION 
+   E NOT (BLSP OR (BLSP1 OR BLSPLP))
+}
+PO1.S2.a {@ Minimum Poly spacing on diffusion regions with contact 
+         @ poly width < 0.24um is 0.35um
+   E = EXT TGATE_Wb < 0.35 ABUT>0<90 REGION 
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+PO1.S2.b {@ Minimum Poly spacing on diffusion regions with contact 
+         @ poly width >= 0.24um is 0.35um
+   E = EXT WGATE_Wb GATE_W < 0.35 ABUT>0<90 REGION 
+   E NOT BLSP
+}
+PO1.S3.a {@ Minimum space between two Poly regions on field area is 0.25um
+   E = EXT TEXPO_E < 0.25 ABUT>0<90 REGION 
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+PO1.S3.b.1 {@ Minimum space between two Poly regions on field area is 0.25um
+   E = EXT WEXPO_E EXPO_E < 0.25 ABUT>0<90 REGION 
+   E NOT (SPRAM OR (BLSP1 OR BLSPLP))
+}
+PO1.S3.b.2 {@ Minimum space between two Poly regions on field area is 0.3um
+   EXT WEXPO_E EXPO_E >= 0.24 < 0.3 ABUT>0<90 PROJ>1.0 PARALLEL
+}
+
+PO1.E1 {@ Minimum overlap of a Poly region extended into field oxide is 0.2um
+   E = ENC DIFF PO1 < 0.2 ABUT<90 REGION
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+PO1.S4 {@ Minimum clearance from an Active region to Poly on field oxide is 0.10um
+   E = EXT PO1 DIFF < 0.10 ABUT<90 SINGULAR REGION // OPPOSITE
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP)) 
+}
+PO1.S5 {@ Minimum Poly endcap to RELATED Active spacing is 0.12um
+   END_CAP =  INTPOL TOUCH GATE == 1  
+   y = DIFF OUTSIDE EDGE GATE
+   Z = GATE TOUCH EDGE END_CAP
+   x = EXT Z y < 0.12 PERP ONLY ABUT == 90 REGION
+   E = x INTERACT END_CAP  
+
+   E NOT (((((BDSP_ID OR DP2)  OR BLSP) OR DP) OR BLSP1) OR (DP1 OR BLSPLP))
+}
+
+PO1.S6 {@ Minimum Poly gate to field edge spacing is 0.3um
+   E1 = ENC PO1 DIFF < 0.3 REGION    // PARALLEL ONLY
+   X = SIZE PO1 BY 0.1
+   E = E1 NOT INSIDE X
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+PO1.W3.18 {@ Min gate width for 45 degree(1.8V) is 0.21um
+   INT GATE1_W < 0.21 ANGLED == 2 REGION
+}
+PO1.W3.33 {@ Min gate width for 45 degree(3.3V) is 0.35um
+   INT GATE3_W < 0.35 ANGLED == 2 REGION
+}
+PO1.A1 {@ Gate at 90 degree angle is not allowed.
+   E1 = EXT GATE1_W < 0.1 ABUT == 90 REGION  // check external corner
+   EXT GATE3_W < 0.1 ABUT == 90 REGION  // check external corner
+   E2 = INT GATE1_W < 0.1 ABUT == 90 REGION  // check internal corner
+   INT GATE3_W < 0.1 ABUT == 90 REGION  // check internal corner
+   E = E1 OR E2
+   E NOT ((SPRAM OR BLSP1) OR (DP1 OR BLSPLP))
+}
+PO1.O1 {@ Maximum Poly overlap of Active region area is 85um x 85um.
+    AREA GATE > 7225
+}
+
+//PO1.W4 {@ Maximum Poly length on Diffusion if PO1.S2 < 0.54 = 0.74
+//   EXT GATE_Wb < 0.54 OPPOSITE PROJ > 0.74 REGION
+//}
+//PO1.W5 {@ Maximum Poly length on diffusion if PO.S6 < 0.49 = 2.0
+//    ENC PO1 DIFF < 0.49 OPPOSITE PROJ > 2.0 REGION
+//}
+PO1.S7 {@ Minimum PO1 bent gate on field region to DIffusion spacing = 0.22
+   E = EXT GATE_W EXPO_E < 0.22 OBTUSE ONLY REGION
+   E NOT (((BDSP_ID OR DP2)  OR BLSP) OR (BLSP1 OR BLSPLP))
+} 
+
+//================================
+//===  HRP Rules               ===
+//================================
+ 
+HRP.W1 {@ Minimum HRP width is 0.65um
+   INT HR < 0.6 ABUT>0<90 SINGULAR REGION
+}
+HRP.S1 {@ Minimum space between two HRP regions is 0.65um
+   EXT HR < 0.6 ABUT>0<90 REGION
+}
+HRP.W2 {@ Minimum HRP PO1 width is 0.18um
+   INT HRPO1 < 0.18 ABUT>0<90 SINGULAR REGION
+}
+HRP.W3 {@ Minimum SAB width for HRP Poly resistor is 1.2um(define HR Poly resistor length)
+   LENGTH SABPO1 < 1.2
+}
+HRP.O1 {@ Minimum HRP mask overlap HRP PO1 resistor, no HRPO1 outside HR
+   ENC HRPO1 HR < 1.2 ABUT<90 OUTSIDE ALSO REGION
+}
+HRP.S2 {@ Minimum HRP to unrelated Poly spacing is 2.0um
+   EXT HR PURPO1 < 2.0 ABUT<90 SINGULAR REGION
+}
+HRP.S3 {@ Minimum HRP PO1 to NPLUS spacing is 0.6um
+   EXT NPLUS HRPO1 < 0.6 ABUT<90 OVERLAP INSIDE ALSO SINGULAR REGION
+}
+HRP.S4 {@ Minimum HRP to PPLUS spacing is 0.6um
+   X = PPLUS OUTSIDE HR
+   EXT X HR < 0.6 ABUT<90 SINGULAR REGION
+}
+HRP.E1 {@ Minimum SAB overlap HRP PO1 resistor is 0.5um
+   ENC HRPO1 SAB < 0.5 REGION
+}
+HRP.S5 {@ Minimum HRP PO1 CONTACT to SAB spacing is 0.6um
+   HRPOCONT =  HRCONT INTERACT PO1
+   EXT HRPOCONT SAB < 0.6 SINGULAR REGION  
+}
+HRP.S6 {@ Minimum HRP to unrelated DIFF spacing is 0.5um
+   EXT HR DIFF < 0.5 SINGULAR INSIDE ALSO REGION
+}
+HRP.O2 {@ Minimum NWELL overlap HRP PO1 resistor is 1.8um
+   ENC HRPO1 NWELL < 1.8 REGION OUTSIDE ALSO
+}
+
+HRP.O3 {@ P+ implant overlap SAB,include SAB not overlap P+
+  NOT INTERACT (SAB AND HR) PPLUS
+
+INT PPLUS SAB < 0.2 ABUT<90 SINGULAR REGION
+
+}
+
+HRP.S7 {@ Minimum P+ implant spacing to unrelated poly resistor is 0.3um
+   EXT PPLUS hSAB_POL < 0.3 REGION
+}
+
+HRP.O4 {@ Minimum P+ implant layer overlap HRP poly (this is the same for non-salicide poly resistor) is 0.3um
+   ENC HRPO1 PPLUS < 0.3 REGION
+}
+
+HRP.not.allow {@ CIC won't allow a single poly to be partically covered by HRP 
+          @ and partially not covered by HR
+          
+x = PO1 INTERACT HR
+X NOT INSIDE HR 
+
+}          
+//================================
+//===  N+ Implant Rules 	  ===
+//================================
+GROUP DRAWN_NPLUS NIMP.? //4.16? 4.16?.? 
+//
+NIMP.W1 {@ Minimum width of a NPlus region is 0.45um
+   E = INT NPLUS < 0.45 ABUT>0<90 SINGULAR REGION
+   E NOT  BLSPLP
+}
+NIMP.S1 {@ Minimum space between two NPlus regions is 0.45um
+   E = EXT NPLUS < 0.45 ABUT>0<90 REGION
+   E NOT  BLSPLP
+}
+NIMP.O1 {@ Minimum NPlus overlap N+ diffusion (inside P-Well or Twell) is 0.2um
+   E1 = ENC DIFF_PS NPLUS < 0.2 SINGULAR ABUT<90 REGION
+   E2 = ENC DIFF_TW NPLUS < 0.2 SINGULAR ABUT<90 REGION
+   E  = E1 OR E2
+   E NOT (BLDP OR (BLSP1 OR BLSPLP))
+}
+NIMP.O2 {@ Minimum NPlus overlap N+ diffusion inside N-Well is 0.1um
+   E = ENC DIFF_NT NPLUS < 0.1 SINGULAR ABUT<90 REGION
+   E NOT DP
+}
+NIMP.S2 {@ Minimum NPlus to P+ diffusion spacing(inside N-Well) is 0.2um
+   EXT NPLUS DIFF_NT < 0.2  ABUT<90 SINGULAR REGION
+}
+NIMP.S3 {@ Minimum NPlus to P+ diffusion spacing(inside P-Well or Twell) is 0.1um
+   E1 = EXT NPLUS DIFF_PS < 0.1 ABUT<90 SINGULAR REGION
+   E2 = EXT NPLUS DIFF_TW < 0.1 ABUT<90 SINGULAR REGION
+   E = E1 OR E2
+   E NOT DP
+}
+
+NIMP.S4 {@ Minimum N+ to P+ diffusion space in the same potential
+   x = NPLUS AND PPLUS
+   x AND DIFF
+}
+
+NIMP.E1 {@ Minimum N+ implant overlap Diffusion to form N+ region is 0.25um
+
+INT NPLUS DIFF < 0.25 ABUT<90 SINGULAR REGION
+
+}
+
+NIMP.E2 {@ Minimum P+ implant overlap Diffusion to form P+ region is 0.25um
+
+INT PPLUS DIFF < 0.25 ABUT<90 SINGULAR REGION
+
+}
+
+NIMP.S5 {@ Minimum N+ implant to Poly spacing to form N+ S/D region is 0.3um
+
+X = NPLUS TOUCH PDIF
+E = EXT X PO1 < 0.3 ABUT<90 SINGULAR REGION
+E AND DIFF
+
+}
+NIMP.O3 {@ Minimum P+ implant to Poly spacing to form P+ S/D region is 0.3um
+
+X = PPLUS TOUCH NDIF
+E = EXT X PO1 < 0.3 ABUT<90 SINGULAR REGION
+E AND DIFF
+}
+
+NIMP.O4 {@ Minimum N+ implant overlap N+ contact is 0.12um
+
+ENC CONT NPLUS <0.12 SINGULAR REGION
+
+}
+
+NIMP.S6 {@ Minimum N+ implant to P+ contact spacing is 0.1um
+
+ENC CONT PPLUS <0.1 SINGULAR REGION
+
+}
+
+NIMP.P1 {@ Soft Contacts are prohibited
+a = PDIF INTERACT GATE
+b = NDIF INTERACT GATE
+c = NDIF TOUCH a 
+d = PDIF TOUCH b
+
+c NOT ENCLOSE CONT
+d NOT ENCLOSE CONT
+}
+
+EXP_NW   = SIZE NWEL  BY 0.24 
+EXP_TNW  = SIZE TWEL  BY -0.24 
+
+EXP_PTAP = SIZE ( PPLUS AND DIFF_PS ) BY 20 OUTSIDE OF EXP_NW  STEP 1.38
+EXPT_PTAP= SIZE ( PPLUS AND DIFF_TW ) BY 20 INSIDE  OF EXP_TNW STEP 1.38
+NIMP.S7 {@ Maximum N+ diffusion to the nearest P+ pick-up spacing (inside P-Well or Twell) is 20um (I/O, RAM, ROM, capacitor and diode are excepted)
+   E1 = ( DIFF_PS NOT PPLUS ) NOT EXP_PTAP   
+   E2 = ( DIFF_TW NOT PPLUS ) NOT EXPT_PTAP   
+   E = (E1 OR E2) NOT ( CSYMBOL OR DSYMBOL )
+   E NOT (((IO OR ((SRAM OR DP1) OR BLSP1)) OR ROM) OR DIOBLK)
+}
+
+NIMP.ERR {@ Active not covered by implant when NPLUS is a draw layer
+   NDIF NOT NPLUS
+   NTAP NOT NPLUS
+}
+//================================
+//===  P+ Implant Rules        ===
+//================================
+//This rule also apply to Twell P+ implant
+
+PIMP.W1 {@ Minimum width of a PIMP region is 0.45um
+   E = INT PPLUS < 0.45 ABUT>0<90 SINGULAR REGION
+   E NOT BLSPLP
+}
+PIMP.S1 {@ Minimum space between two PIMP regions is 0.45um
+   E = EXT PPLUS < 0.45 ABUT>0<90 REGION
+   E NOT BLSPLP 
+}
+PIMP.O2 {@ Minimum PIMP overlap P+ diffusion(inside N-Well) is 0.2um
+   ENC DIFF_NT PPLUS < 0.2 SINGULAR ABUT<90 REGION
+}
+PIMP.O1 {@ Minimum PIMP overlap P+ diffusion(inside P-Well or Twell) is 0.1um
+   E1 = ENC DIFF_PS PPLUS < 0.1 SINGULAR ABUT<90 REGION
+   E2 = ENC DIFF_TW PPLUS < 0.1 SINGULAR ABUT<90 REGION
+   E = E1 OR E2
+   E NOT DP
+}
+PIMP.S2 {@ Minimum PIMP to N+ diffusion spacing(inside N-Well) is 0.1um
+   EXT PPLUS DIFF_NT_logic < 0.1 ABUT<90 SINGULAR REGION
+}
+PIMP.S3 {@ Minimum PIMP to N+ diffusion spacing(inside P-Well or Twell) is 0.2um
+   E1 = EXT PPLUS DIFF_PS < 0.2  ABUT<90 SINGULAR REGION     
+   E2 = EXT PPLUS DIFF_TW < 0.2  ABUT<90 SINGULAR REGION     
+   E = E1 OR E2
+   E NOT BLDP
+}
+
+
+//===================================
+//===   N+/P+ Butting Rules       ===
+//=================================== 
+
+// PIMP.S4 checked by NIMP.S4 or NPLUS layer creation rule
+ 
+PIMP.E1 {@ Minimum PIMP overlap Diffusion to form P+ region is 0.25um
+   INT DIFF BUT_PPLUS < 0.25 ABUT<90 REGION
+}
+PIMP.E2 {@ Minimum Diffusion extension over PIMP to form N+ region is 0.25um
+   ENC BUT_PPLUS DIFF < 0.25 ABUT<90 REGION
+}
+PIMP.S5 {@ Minimum PIMP to Poly spacing to form N+ S/D region is 0.3um
+   EXT GATE_W BUT_PPLUS < 0.3 ABUT<90 REGION
+}
+PIMP.O3 {@ Minimum PIMP extension over Poly to form P+ s/d is 0.3um
+   ENC GATE_W BUT_PPLUS < 0.3 ABUT REGION
+}
+PIMP.O4 {@ Minimum PIMP overlap CO region is 0.1um, no butted contact.
+   ENC DIFCNT BUT_PPLUS < 0.1 ABUT REGION
+}
+PIMP.S6 {@ Minimum PIMP to NIMP contact spacing is 0.1um
+   EXT DIFCNT BUT_PPLUS < 0.1 ABUT<90 REGION
+}
+PIMP.P1 {@ Soft Contacts are prohibited
+   BUT_PS   NOT ENCLOSE CONT
+   BUT_NS   NOT ENCLOSE CONT
+   BUT_NTAP NOT ENCLOSE CONT
+   E = BUT_PTAP NOT ENCLOSE CONT
+   E NOT DP
+}
+NWEL1 = NWELL NOT TWEL
+SHK_NW   = SIZE NWEL1 BY -0.24 
+EXP_NTAP = SIZE NTAP BY 20 INSIDE OF SHK_NW STEP 1.38
+PIMP.S7 {@ Maximum P+ diffusion to nearest N+ pick-up spacing (inside N-Well) is 20um (I/O, RAM, ROM, capacitor and diode are expected)
+//   T = PDIF NOT  EXP_NTAP   
+//   X = T NOT ((IO OR ( (SRAM OR DP1) OR BLSP1) ) OR ROM)
+//   X NOT (( CSYMBOL OR DSYMBOL ) OR (DIOBLK OR BLSPLP))
+   X = PDIF INTERACT PO1
+   EXP_NTAP = SIZE NTAP BY 20 INSIDE OF NWELL STEP 0.8
+   T = ( X NOT  EXP_NTAP ) NOT IOID 
+   (((((((T NOT BLSPLP) NOT BDSP_ID) NOT DP2) NOT BLSP) NOT DP) NOT DP1) NOT BLSP1) NOT ROM
+
+}
+//==========================================
+//===  Salicide-Block (SAB) Rules        ===
+//==========================================
+// and Non-Salicided Resistor
+
+SAB_DIF = DIFF  INTERACT SAB		// DIFF with SAB
+IO_SD   = SAB_DIF INTERACT GATE         // SAB DIFF with gates
+SAB_DIF_RES = SAB_DIF NOT INTERACT GATE // SAB diff resistor
+IO_SDa  = IO_SD   NOT GATE              // I/O S/D
+IO_D    = IO_SDa          INTERACT SAB  // I/O drain
+
+IO_SAB  = SAB INTERACT IO_SD
+RES_SAB = SAB NOT INTERACT IO_SD        // SAB for diff or poly res
+
+aSAB_POL   = EXPOL INTERACT RES_SAB
+SAB_POL   = aSAB_POL NOT INTERACT HR      // NON-HR SAB poly resistor
+hSAB_POL  = aSAB_POL INTERACT HR        // HR SAB poly resistor
+P_SAB_POL = SAB_POL INSIDE PPLUS
+N_SAB_POL = SAB_POL NOT INSIDE PPLUS
+
+SAB.W1 {@ Minimum SAB width is 0.65um
+   INT SAB < 0.65 ABUT>0<90 SINGULAR REGION
+}
+SAB.S1 {@ Minimum SAB space is 0.65um
+   EXT SAB < 0.65 ABUT>0<90 REGION
+}
+// SAB RULES FOR I/O's
+//
+SAB.E1 {@ Minimum distance of SAB edge to Diffusion edge is 0.28um
+   ENC SAB DIFF < 0.28 ABUT<90 SINGULAR REGION
+}
+SAB.S2 {@ Minimum SAB to Poly spacing is 0.28um
+   EXT SAB PO1 < 0.28 ABUT<90 SINGULAR REGION
+}
+SAB.S3 {@ Minimum SAB extention to unreltaed Diffusion region is 0.24um
+   EXT SAB DIFF < 0.24 ABUT<90 SINGULAR REGION
+}
+SAB.S4 {@ Minimum SAB to Diffusion Contact spacing is 0.28um
+   EXT IO_SAB DIFCNT < 0.28 ABUT<90 SINGULAR REGION
+}
+SAB.S5 {@ Minimum SAB to Poly Contact spacing is 0.28um
+//   EXT IO_SAB POLCNT < 0.28 ABUT<90 SINGULAR REGION
+ 
+   EXT GPOCONT SAB < 0.28 ABUT SINGULAR OVERLAP INSIDE ALSO REGION
+}
+//
+//SAB RULES FOR NON-SALICIDE RESISTORS
+//
+SAB.E2 {@ Minimum SAB extension over Diffusion non-salicide resistor is 0.35um
+    ENC SAB_DIF_RES RES_SAB < 0.35 ABUT<90 SINGULAR REGION
+}
+SAB.E3 {@ Minimum SAB extension over Poly non-salicide resistor is 0.35um
+    ENC SAB_POL RES_SAB < 0.35 ABUT<90 SINGULAR REGION
+}
+SAB.S6 {@ Minimum SAB to salicide contact spacing is 0.35um
+    EXT RES_SAB CONT < 0.35 ABUT<90 SINGULAR INSIDE ALSO OPPOSITE REGION
+}
+SAB.O1 {@ Minimum P+ implant layer overlap P+ Poly non-salicide resistor is 0.28um
+    ENC SAB_POL PPLUS < 0.28 ABUT<90 OVERLAP SINGULAR REGION
+}
+4.18K {@ Minimum P+ implant layer to N+ Poly non-salicide resistor spacing is 0.28um
+    EXT PPLUS SAB_POL < 0.28 ABUT<90 SINGULAR REGION
+}
+SAB.S7 {@ P+ Poly non-salicide resistor must be allocated inside N-Well
+       @ Minimum N-Well overlap P+ Poly non-salicide resistor is 0.28um
+    ENC P_SAB_POL NWEL < 0.28 ABUT<90 SINGULAR OUTSIDE ALSO REGION
+}
+SAB.S8 {@ N+ Poly non-salicide resistor must be allocated outside N-Well
+       @ Minimum N-Well to N+ Poly non-salicide resistor is 0.28um
+    X = EXT N_SAB_POL NWEL < 0.28 ABUT<90 SINGULAR INSIDE ALSO REGION
+    Y = X NOT HR
+    Y NOT TWEL
+}
+SAB.O3 {@ Minimum N+ implant layer overlap N+ Poly non-salicide resistor is 0.28um
+    ENC N_SAB_POL NPLUS < 0.28 ABUT<90 OVERLAP SINGULAR REGION
+}
+SAB.S9 {@ Minimum N+ implant layer to P+ Poly non-salicide resistor spacing is 0.28um
+    EXT P_SAB_POL NPLUS < 0.28 ABUT<90 SINGULAR REGION
+}
+SAB.N1 {@ Non-salicide contact for device or non-salicide resistor is not allowed.
+   CONT AND SAB
+}
+ 
+//============================
+//===  Contact Rule        ===
+//============================
+CONT.A1 {@ Minimum and maximum width of a CONT region is 0.23um
+   E = NOT RECTANGLE CONT == 0.23 BY == 0.23
+   E NOT (BLSP OR (BLSP1 OR BLSPLP))
+}
+CONT.S1 {@ Minimum space between two CONT regions is 0.25um
+   E = EXT CONT < 0.25 ABUT>0<90 SINGULAR REGION
+   E NOT (BLSP OR (BLSP1 OR BLSPLP))
+}
+CONT.S2.18 {@ Minimum diffusion CONT to Poly(1.8V) spacing is 0.14um, no contact on gate
+   E = EXT DIFCNT1 GATE < 0.14 ABUT<90 SINGULAR INSIDE ALSO REGION
+   E NOT (((SPRAM OR ROM) OR BLSP1) OR (DP1 OR BLSPLP))
+}
+CONT.S2.33 {@ Minimum diffusion CONT to Poly(3.3V) spacing is 0.28um, no contact on gate
+   EXT DIFCNT3 GATE < 0.28 ABUT<90 SINGULAR INSIDE ALSO REGION
+}
+
+CONT.S3 {@ Minimum PO1 Contact to Diffusion spaceing is 0.18um
+   E = EXT POLCNT DIFF < 0.18 ABUT<90 SINGULAR REGION
+   E NOT (BDSP OR BLSPLP)
+}
+CONT.O1 {@ Minimum Poly overlap contact is 0.12um, no floating conntact
+   E = ENC POLCNT PO1 < 0.12 ABUT SINGULAR REGION
+   E NOT ((BLSP OR BLSP1) OR (DP OR BLSPLP))
+}
+CONT.O2 {@ Minimum extension of an Active region beyond a CONT region is 0.12
+   E = ENC DIFCNT DIFF < 0.12 ABUT<90 SINGULAR OVERLAP REGION
+   E NOT (((SRAM OR ROM) OR BLSP1) OR (DP1 OR BLSPLP))
+}
+
+
+//============================
+//===  Metal-1 Rule        ===
+//============================
+
+m1x     = SIZE ME1 BY -0.16 // width > 0.32 are deleted
+m1y     = SIZE m1x BY -4.83  // width >= 10 are deleted
+BMET1_a = SIZE m1y BY 4.99  INSIDE OF ME1 STEP 0.27 // ME1 width >= 10
+BMET1 = BMET1_a AND ME1
+BM_VIA1 = VI1 INSIDE BMET1
+ME1.W1 {@ Minimum width of ME1 region is 0.23um
+    E = INT ME1 < 0.23 ABUT>0<90 SINGULAR REGION
+    E NOT (BLDP OR (BLSP1 OR BLSPLP))
+}
+ME1.S1 {@ Minimum space between ME1 regions is 0.24um where MET1 width < 10um
+    E = EXT ME1 < 0.24 ABUT>0<90 REGION
+    E NOT (BLDP OR (BLSP1 OR BLSPLP))
+}
+ME1.S2 {@ Minimum space between ME1 regions is 0.28 where one MET1 width >= 10um
+    EXT BMET1 ME1 < 0.28 REGION 
+}
+ME1.O1 {@ Minimum Metal1 overlap contac is 0um, no contact outside Metal1
+   E = NOT CONT ME1 
+   E NOT (BLSP OR (BLSP1 OR BLSPLP))
+} 
+ME1.O2 {@ metal enclose contact at end-of-line or outer corner is 0.08 
+   x = ENC [CONT] ME1 < 0.08 ABUT<90  OPPOSITE    // co edge with metal enc < 0.08
+   E = INT x < 0.24 ABUT==90 INTERSECTING ONLY REGION
+   E NOT ((SRAM OR BLSP1) OR (DP1 OR BLSPLP))
+} 
+ME1.A1 {@ Minimum area of ME1 region 0.2025 sq.um2
+   AREA ME1 < 0.2025
+}
+
+//=========================
+//===  Via1 Rule        ===
+//=========================
+ 
+VIA1.A1 {@ Minimum and maximum width of a VI1 region is 0.25um
+   NOT RECTANGLE VI1 == 0.25 BY == 0.25
+}
+VIA1.S1 {@ Minimum space between two VI1 regions  is 0.27um
+   EXT VI1 < 0.27 ABUT>0<90 SINGULAR REGION
+}
+VIA1.O1 {@ Minimum MET1(width<10um) overlap Via1 is 0, no VI1 outside ME1
+   NOT VI1 ME1
+}
+VIA1.O2 {@ Minimum MET1(width>=10um) overlap Via1 is 0.15um
+   ENC BM_VIA1 ME1 < 0.15 ABUT<90 REGION
+ 
+} 
+
+VIA1.O3 {@ metal1 enclose Via1 at end-of-line or outer corner is 0.1
+   x = ENC [VI1] ME1 < 0.1 ABUT<90  OPPOSITE    
+   E = INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+   E NOT (BDSP OR BLSPLP)
+}
+
+//============================
+//===  Metal-2 Rule        ===
+//============================
+ 
+m2x    = SIZE ME2 BY -0.2   
+m2y    = SIZE m2x BY -4.79   
+BMET2a = SIZE m2y BY 4.99  INSIDE OF ME2 STEP 0.27
+BMET2 = BMET2a AND ME2
+BM_VIA2 = VI2 INSIDE BMET2
+
+ 
+ME2.W1 {@ Minimum width of ME2 region is 0.25um
+   INT ME2 < 0.25 ABUT>0<90 SINGULAR REGION
+}
+ME2.S1 {@ Minimum space between two ME2 regions is 0.27um
+   EXT ME2 < 0.27 ABUT>0<90 REGION
+}
+ME2.s2 {@ Minimum space between ME2 regions is 0.32 where one MET2 width >= 10um
+   EXT BMET2 ME2 < 0.3 REGION
+}
+ME2.O1 {@ Minimum Metal2 overlap Via1 is 0um, no VI1 outside Metal2
+   NOT VI1 ME2
+}
+ME2.O2 {@ metal2 enclose Via1 at end-of-line or outer corner is 0.1
+   x = ENC [VI1] ME2 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME2.A1 {@ Minimum ME2 Area 0.25 sq. um.
+   AREA ME2 < 0.25
+}
+ 
+//============================
+//===  Via-2 Rule        =====
+//============================
+ 
+VIA2.A1 {@ Minimum and maximum width of a VI2 region is 0.25um
+   NOT RECTANGLE VI2 == 0.25 BY == 0.25
+}
+VIA2.S1 {@ Minimum space between two VI2 regions is 0.27um
+   EXT VI2 < 0.27 ABUT>0<90 SINGULAR REGION
+}
+VIA2.O1 {@ Minimum MET2(width < 10um) overlap VI2 is 0um, no VI2 outside ME2
+   NOT VI2 ME2
+}
+VIA2.O2 {@ Minimum MET2(width>=10um) overlap VI2 is 0.15um
+    ENC BM_VIA2 ME2 < 0.15 ABUT<90 REGION
+}
+VIA2.O3 {@ metal2 enclose Via2 at end-of-line or outer corner is 0.1
+   x = ENC [VI2] ME2 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+//============================
+//===  Metal-3 Rule        ===
+//============================
+m3x = SIZE ME3 BY -0.2  // width <= 0.4 are deleted
+m3y = SIZE m3x BY -4.79  // width < 10 are deleted
+BMET3_a = SIZE m3y BY 4.99 INSIDE OF ME3 STEP 0.27
+BMET3 = BMET3_a AND ME3
+BM_VIA3= VI3 INSIDE BMET3
+
+
+ME3.W1 {@ Minimum width of ME3 region is 0.25um 
+   INT ME3 < 0.25 ABUT>0<90 SINGULAR REGION
+}
+ME3.S1 {@ Minimum space between two ME3 regions is 0.27um
+   EXT ME3 < 0.27 ABUT>0<90 REGION
+}
+ME3.S2 {@ Minimum space between ME3 regions is 0.3 where one ME3 width >= 10um
+   EXT BMET3 ME3 < 0.3 REGION
+}
+ME3.O1 {@ Minimum ME3 overlap VI2 is 0um, no VI2 outside ME3
+   NOT VI2 ME3
+}
+ME3.O2 {@ metal3 enclose Via2 at end-of-line or outer corner is 0.1
+   x = ENC [VI2] ME3 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME3.A1 {@ Minimum ME3 Area 0.25 sq. um2
+   AREA ME3 < 0.25
+}
+
+//============================
+//===  Via-3 Rule        =====
+//============================
+ 
+VIA3.A1 {@ Minimum and maximum width of a VI3 region is 0.25um
+   NOT RECTANGLE VI3 == 0.25 BY == 0.25
+}
+VIA3.S1 {@ Minimum space between two VI3 regions is 0.27um
+   EXT VI3 < 0.27 ABUT>0<90 SINGULAR REGION
+}
+VIA3.O1 {@ Minimum MET3(width < 10um) overlap VI3 is 0um, no VI3 outside ME3
+   NOT VI3 ME3
+}
+VIA3.O2 {@ Minimum MET3(width>=10um) overlap VI3 is 0.15um
+  ENC BM_VIA3 ME3 < 0.15 ABUT<90 REGION
+}
+VIA3.O3 {@ metal3 enclose Via3 at end-of-line or outer corner is 0.1
+   x = ENC [VI3] ME3 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+//============================
+//===  Metal-4 Rule        ===
+//============================
+m4x = SIZE ME4 BY -0.2  // width <= 0.4 are deleted
+m4y = SIZE m4x BY -4.79  // width < 10 are deleted
+BMET4a = SIZE m4y BY 4.99 INSIDE OF ME4 STEP 0.27
+BMET4 = BMET4a AND ME4
+BM_VIA4= VI4 INSIDE BMET4
+
+ME4.W1 {@ Minimum width of ME4 region is 0.25um
+   INT ME4 < 0.25 ABUT>0<90 SINGULAR REGION
+}
+ME4.S1 {@ Minimum space between two ME4 regions is 0.27um
+   EXT ME4 < 0.27 ABUT>0<90 REGION
+}
+ME4.S2 {@ Minimum space between ME4 regions is 0.3 where one ME4 width >= 10um
+   EXT BMET4 ME4 < 0.3 REGION
+}
+ME4.O1 {@ Minimum ME4 overlap VI3 is 0um, no VI3 outside ME4
+   NOT VI3 ME4
+}
+ME4.O2 {@ metal4 enclose Via3 at end-of-line or outer corner is 0.1
+   x = ENC [VI3] ME4 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME4.A1 {@ Minimum ME4 Area 0.25 sq. um2
+   AREA ME4 < 0.25
+}
+
+//============================
+//===  Via-4 Rule        =====
+//============================
+ 
+VIA4.A1 {@ Minimum and maximum width of a VI4 region is 0.25um
+   NOT RECTANGLE VI4 == 0.25 BY == 0.25
+}
+VIA4.S1 {@ Minimum space between two VI4 regions is 0.27um
+   EXT VI4 < 0.27 ABUT>0<90 SINGULAR REGION
+}
+VIA4.O1 {@ Minimum MET4(width < 10um) overlap VI4 is 0um, no VI4 outside ME4
+   NOT VI4 ME4
+}
+VIA4.O2 {@ Minimum MET4(width>=10um) overlap VI4 is 0.15um
+  ENC BM_VIA4 ME4 < 0.15 ABUT<90 REGION    
+}
+VIA4.O3 {@ metal4 enclose Via4 at end-of-line or outer corner is 0.1
+   x = ENC [VI4] ME4 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+//============================
+//===  Metal-5 Rule        ===
+//============================
+m5x = SIZE ME5 BY -0.2  // width <= 0.4 are deleted
+m5y = SIZE m5x BY -4.79  // width < 10 are deleted
+BMET5a = SIZE m5y BY 4.99  INSIDE OF ME5 STEP 0.27
+BMET5 = BMET5a AND ME5
+BM_VIA5 = VI5 INSIDE BMET5
+
+
+ME5.W1 {@ Minimum width of ME5 region is 0.25um
+   INT ME5 < 0.25 ABUT>0<90 SINGULAR REGION
+}
+ME5.S1 {@ Minimum space between two ME5 regions is 0.27um
+   EXT ME5 < 0.27 ABUT>0<90 REGION
+}
+ME5.S2 {@ Minimum space between ME5 regions is 0.3 where one ME5 width >= 10um
+   EXT BMET5 ME5 < 0.3 REGION
+   
+}
+ME5.O1 {@ Minimum ME5 overlap VI4 is 0um, no VI4 outside ME5
+   NOT VI4 ME5
+}
+ME5.O2 {@ metal5 enclose Via4 at end-of-line or outer corner is 0.1
+   x = ENC [VI4] ME5 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME5.A1 {@ Minimum ME5 Area 0.25 sq. um2
+   AREA ME5 < 0.25
+}
+
+
+ 
+//============================
+//===  MMC Rule            ===
+//============================
+GROUP RF_RULES CTM.O3 CTM.O4
+
+CTM.W1 {@ Minimum width of MMC region is 0.8um
+   INT MMC < 0.6 ABUT>0<90 SINGULAR REGION
+}
+CTM.S1 {@ Minimum space between two MMC regions is 0.6um
+   EXT MMC < 0.6 ABUT>0<90 REGION
+}
+CTM.O1 {@ Minimum ME5 overlap MMC is 0.6um, no MMC outside ME5
+   ENC MMC ME5 < 0.6 ABUT<90 OUTSIDE ALSO REGION
+}
+CTM.O2 {@ Minimum MMC overlap VI5 is 0.6um
+   ENC VI5 MMC < 0.6 ABUT SINGULAR OVERLAP REGION
+}
+CTM.S2 {@ Minimum MMC to unrelated VI5 is 0.6um
+   EXT MMC VI5 < 0.6 ABUT SINGULAR REGION
+}
+CTM.A1 {@ Maximum MMC overlap LSM area
+   AREA MMC > 90*90
+}
+CTM.O3 {@ The minimum overlap of M1 ground plate to LSM is 8um
+   LSM  = (ME5 ENCLOSE MMC) INTERACT (ME1 OR MCAP)
+   ME1S = MET1_SLOT_ALL INTERACT ((ME1 OR MCAP) ENCLOSE LSM)
+   ENC LSM ME1S < 8 ABUT<90 SINGULAR  OUTSIDE ALSO REGION OVERLAP
+
+}
+CTM.O4 {@ The minimum overlap of MCAP block layer (block P-Well implant) to LSM is 8um
+   X = (ME5 INTERACT MMC) INTERACT MCAP
+   ENC X MCAP < 8 ABUT<90 SINGULAR OVERLAP OUTSIDE ALSO REGION
+}
+
+//============================
+//===  Via-5 Rule        =====
+//============================
+ 
+VIA5.A1 {@ Minimum and maximum width of a VI5 region is 0.25um
+   NOT RECTANGLE VI5 == 0.25 BY == 0.25
+}
+VIA5.S1 {@ Minimum space between two VI5 regions is 0.27um
+   EXT VI5 < 0.27 ABUT>0<90 SINGULAR REGION
+}
+VIA5.O1 {@ Minimum MET5(width<10um) overlap VI5 is 0um, no VI5 outside ME5
+   NOT VI5 ME5
+}
+VIA5.O2 {@ Minimum MET5(width>=10um) overlap VI5 is 0.15um
+  ENC BM_VIA5 ME5  < 0.15 ABUT<90 REGION 
+}
+VIA5.O3 {@ metal5 enclose Via5 at end-of-line or outer corner is 0.1
+   x = ENC [VI5] ME5 < 0.1 ABUT<90  OPPOSITE    // via edge with metal enc < 0.08
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+
+
+//============================
+//===  Metal-6 Rule        ===
+//============================
+//include Inductor rules
+
+GROUP METOP_8KA ME6.?_8KA
+//
+m6x = SIZE ME6 BY -0.2  // width <= 0.4 are deleted
+m6y = SIZE m6x BY -4.79  // width < 10 are deleted
+
+BMET6 = SIZE m6y BY 4.99 INSIDE OF ME6 STEP 0.27
+
+ME6.W1_8KA {@ Minimum width of ME6 region is 0.4um
+   INT ME6 < 0.4 ABUT>0<90 SINGULAR REGION
+}
+ME6.S1_8KA {@ Minimum space between two ME6 regions is 0.4um
+   EXT ME6 < 0.4 ABUT>0<90 REGION
+}
+ME6.S2_8KA {@ Minimum space between MET6(width>=10um) regions is 0.60um
+   EXT BMET6 ME6 < 0.60 SINGULAR REGION
+}
+ME6.O1_8KA {@ Minimum ME6 overlap VI5 is 0um, no VI5 outside ME6
+   NOT VI5 ME6
+}
+ME6.O2_8KA {@ ME6 enclose Via5 at end-of-line or outer corner is 0.1
+   x = ENC [VI5] ME6 < 0.1 ABUT<90  OPPOSITE    
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME6.A1_8KA {@ Minimum ME6 Area 0.49 sq. um2
+   AREA ME6 < 0.4624
+}
+//
+GROUP METOP_20KA ME6.?_20KA
+//
+ME6.W1_20KA {@ Minimum width of ME6 region is 1.5um
+   INT ME6 < 1.5 ABUT>0<90 SINGULAR REGION
+}
+ME6.S1_20KA {@ Minimum space between two ME6 regions is 1.2um
+   EXT ME6 < 1.2 ABUT>0<90 SINGULAR REGION
+}
+ME6.S2_20KA {@ Minimum space between MET6(width>=10um) regions is 1.5um
+   x = EXT BMET6 ME6 < 1.5 REGION
+   x NOT IND
+}
+ME6.O1_20KA {@ Minimum ME6 overlap VI5 is 0.3um, no VI5 outside ME6
+   ENC VI5 ME6 < 0.3 ABUT SINGULAR OUTSIDE ALSO REGION
+}
+ME6.O2_20KA {@ metal6 enclose Via5 at end-of-line or outer corner is 0.4
+   x = ENC [VI5] ME6 < 0.40 ABUT<90  OPPOSITE    // via edge with metal enc < 0.4
+   INT x < 0.28 ABUT==90 INTERSECTING ONLY REGION
+}
+ME6.A1_20KA {@ Minimum ME6 Area 6.25 sq. um.
+   AREA ME6 < 6.25
+}
+ME6.O3_20KA {@ The minimum overlap of IND block to inductor layer is 10um
+                @ Only Inductor ME6 is allowed in IND
+   IND_MET = ME6 AND LSYMBOL
+   CONN_M6 = ME6 NOT LSYMBOL
+   X = ENC IND_MET IND < 10 ABUT<90 SINGULAR OVERLAP OUTSIDE ALSO REGION
+   X NOT INTERACT CONN_M6
+   ((ME6 AND IND) INTERACT LSYMBOL) NOT LSYMBOL
+}
+ 
+ 
+//============================
+//===  PESD Rule           ===
+//============================
+//
+PESD.W1 {@ Minimum width of PESD region is 0.60um
+   INT PESD < 0.60 ABUT>0<90 SINGULAR REGION
+}
+PESD.S1 {@ Minimum space between two PESD regions is 0.60um
+   EXT PESD < 0.60 ABUT>0<90 REGION
+}
+
+//  =============================
+//  ===== METAL DENSITY RULE ====
+//  =============================
+
+GROUP METAL_DENSITY PO?.D1 PO?.D2 ME?.D1 ME?.D2 
+
+PO1.D1 {@ The Poly coverage must be larger than 20% of entire chip area
+   DENSITY PO1 < 0.2
+}
+PO1.D2 {@ The Metal1 coverage must be larger than 17% for every millimeter square
+   DENSITY ME1 < 0.17 WINDOW 1000 STEP 500
+}
+ME1.D1 {@ The Metal1 coverage must be larger than 28% of entire chip area
+   DENSITY ME1 < 0.28
+}
+ME1.D2 {@ The Metal1 coverage must be larger than 25% for every millimeter square
+   DENSITY ME1 < 0.25 WINDOW 1000 STEP 500
+}
+ME2.D1 {@ The Metal2 coverage must be larger than 28% of entire chip area
+   DENSITY ME2 < 0.28
+}
+ME2.D2 {@ The Metal2 coverage must be larger than 25% for every millimeter square
+   DENSITY ME2 < 0.25 WINDOW 1000 STEP 500
+}
+ME3.D1 {@ The Metal3 coverage must be larger than 28% of entire chip area
+   DENSITY ME3 < 0.28
+}
+ME3.D2 {@ The Metal3 coverage must be larger than 25% for every millimeter square
+   DENSITY ME3 < 0.25 WINDOW 1000 STEP 500
+}
+ME4.D1 {@ The Metal4 coverage must be larger than 28% of entire chip area
+   DENSITY ME4 < 0.28
+}
+ME4.D2 {@ The Metal4 coverage must be larger than 25% for every millimeter square
+   DENSITY ME4 < 0.25 WINDOW 1000 STEP 500
+}
+ME5.D1 {@ The Metal5 coverage must be larger than 28% of entire chip area
+   DENSITY ME5 < 0.28
+}
+ME5.D2 {@ The Metal5 coverage must be larger than 25% for every millimeter square
+   DENSITY ME5 < 0.25 WINDOW 1000 STEP 500
+}
+ME6.D1 {@ The Metal6 coverage must be larger than 28% of entire chip area
+   DENSITY ME6 < 0.28
+}
+ME6.D2 {@ The Metal6 coverage must be larger than 25% for every millimeter square
+   DENSITY ME6 < 0.25 WINDOW 1000 STEP 500
+}
+//
+//  =====================================
+//  ===== MAXIMUM METAL SPACING RULE ====
+//  =====================================
+GROUP MAX_MET_SPACE ME1.S3 ME2.S3 ME3.S3 ME4.S3 ME5.S3
+ME1.S3 {@ Maximum metal1 to metal1 spacing 400
+   x = SIZE ME1 BY 200
+   y = BULK NOT x
+   SIZE y BY 200 INSIDE OF BULK
+}
+ME2.S3 {@ Maximum metal2 to metal2 spacing 400
+   x = SIZE ME2 BY 200
+   y = BULK NOT x
+   SIZE y BY 200 INSIDE OF BULK
+}
+ME3.S3 {@ Maximum metal3 to metal3 spacing 400
+   x = SIZE ME3 BY 200
+   y = BULK NOT x
+   SIZE y BY 200 INSIDE OF BULK
+}
+ME4.S3 {@ Maximum metal4 to metal4 spacing 400
+   x = SIZE ME4 BY 200
+   y = BULK NOT x
+   SIZE y BY 200 INSIDE OF BULK
+}
+ME5.S3 {@ Maximum metal5 to metal5 spacing 400
+   x = SIZE ME5 BY 200
+   y = BULK NOT x
+   SIZE y BY 200 INSIDE OF BULK
+}
+
+// =============================
+// ====== DIE CORNER RULE ======
+// =============================
+// ********************************************
+// Followin checks just for your reference
+// BULK may not cover whole chip, seal ring may
+// cause false errors
+// ********************************************
+
+GROUP DIE_CORNER_100 DC.100.MET?
+GROUP DIE_CORNER_99 DC.99.MET?
+
+ACORNER_100 = INT BULK < 361.7 ABUT == 90 REGION
+BCORNER_100 = INT BULK < 341 ABUT == 90 REGION
+CCORNER_100 = EXTENTS BCORNER_100
+
+ACORNER = INT BULK < 177.4 ABUT == 90 REGION
+BCORNER = INT BULK < 126 ABUT == 90 REGION
+CCORNER = EXTENTS BCORNER
+
+CORNER_MET1_100 = ME1 AND ACORNER_100
+CORNER_MET1_E_100 = CORNER_MET1_100 INSIDE EDGE CCORNER_100
+
+DC.100.MET1 {@ Die corner rule 1, Metal must draw with 135 angle
+         a = EXT [CORNER_MET1_E_100] < 1 ABUT==135
+         b = INT [CORNER_MET1_E_100] < 1 ABUT==135
+         c = CORNER_MET1_E_100 NOT TOUCH EDGE a
+         c NOT TOUCH EDGE b
+}
+
+
+CORNER_MET1 = ME1 AND ACORNER
+CORNER_MET1_E  = CORNER_MET1 INSIDE EDGE CCORNER
+
+DC.99.MET1 {@ Die corner rule 1, Metal must draw with 135 angle
+         a = EXT [CORNER_MET1_E] < 1 ABUT==135
+         b = INT [CORNER_MET1_E] < 1 ABUT==135
+         c = CORNER_MET1_E NOT TOUCH EDGE a
+         c NOT TOUCH EDGE b
+}
+
+
+
+CORNER_MET2_100 = ME2 AND ACORNER_100 
+CORNER_MET2_E_100 = CORNER_MET2_100 INSIDE EDGE CCORNER_100 
+ 
+DC.100.MET2 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET2_E_100] < 1 ABUT==135 
+         b = INT [CORNER_MET2_E_100] < 1 ABUT==135 
+         c = CORNER_MET2_E_100 NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+ 
+ 
+CORNER_MET2 = ME2 AND ACORNER 
+CORNER_MET2_E  = CORNER_MET2 INSIDE EDGE CCORNER
+ 
+DC.99.MET2 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET2_E] < 1 ABUT==135 
+         b = INT [CORNER_MET2_E] < 1 ABUT==135 
+         c = CORNER_MET2_E NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+
+
+CORNER_MET3_100 = ME3 AND ACORNER_100 
+CORNER_MET3_E_100 = CORNER_MET3_100 INSIDE EDGE CCORNER_100 
+ 
+DC.100.MET3 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET3_E_100] < 1 ABUT==135 
+         b = INT [CORNER_MET3_E_100] < 1 ABUT==135 
+         c = CORNER_MET3_E_100 NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+ 
+ 
+CORNER_MET3 = ME3 AND ACORNER 
+CORNER_MET3_E  = CORNER_MET3 INSIDE EDGE CCORNER
+ 
+DC.99.MET3 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET3_E] < 1 ABUT==135 
+         b = INT [CORNER_MET3_E] < 1 ABUT==135 
+         c = CORNER_MET3_E NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+
+
+CORNER_MET4_100 = ME4 AND ACORNER_100 
+CORNER_MET4_E_100 = CORNER_MET4_100 INSIDE EDGE CCORNER_100 
+ 
+DC.100.MET4 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET4_E_100] < 1 ABUT==135 
+         b = INT [CORNER_MET4_E_100] < 1 ABUT==135 
+         c = CORNER_MET4_E_100 NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+ 
+ 
+CORNER_MET4 = ME4 AND ACORNER 
+CORNER_MET4_E  = CORNER_MET4 INSIDE EDGE CCORNER
+ 
+DC.99.MET4 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET4_E] < 1 ABUT==135 
+         b = INT [CORNER_MET4_E] < 1 ABUT==135 
+         c = CORNER_MET4_E NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+
+
+CORNER_MET5_100 = ME5 AND ACORNER_100 
+CORNER_MET5_E_100 = CORNER_MET5_100 INSIDE EDGE CCORNER_100 
+ 
+DC.100.MET5 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET5_E_100] < 1 ABUT==135 
+         b = INT [CORNER_MET5_E_100] < 1 ABUT==135 
+         c = CORNER_MET5_E_100 NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+ 
+ 
+CORNER_MET5 = ME5 AND ACORNER 
+CORNER_MET5_E  = CORNER_MET5 INSIDE EDGE CCORNER
+ 
+DC.99.MET5 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET5_E] < 1 ABUT==135 
+         b = INT [CORNER_MET5_E] < 1 ABUT==135 
+         c = CORNER_MET5_E NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+
+
+CORNER_MET6_100 = ME6 AND ACORNER_100 
+CORNER_MET6_E_100 = CORNER_MET6_100 INSIDE EDGE CCORNER_100 
+ 
+DC.100.MET6 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET6_E_100] < 1 ABUT==135 
+         b = INT [CORNER_MET6_E_100] < 1 ABUT==135 
+         c = CORNER_MET6_E_100 NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+ 
+ 
+CORNER_MET6 = ME6 AND ACORNER 
+CORNER_MET6_E  = CORNER_MET6 INSIDE EDGE CCORNER
+ 
+DC.99.MET6 {@ Die corner rule 1, Metal must draw with 135 angle 
+         a = EXT [CORNER_MET6_E] < 1 ABUT==135 
+         b = INT [CORNER_MET6_E] < 1 ABUT==135 
+         c = CORNER_MET6_E NOT TOUCH EDGE a 
+         c NOT TOUCH EDGE b 
+} 
+
+ 
+//  =============================
+//  ====== METAL SLOT RULE ======
+//  =============================
+
+//INCLUDE metal_slot_0.18_1P6M-MMC-Calibre-drc-2.2-p1
+ 
+//
+//  =============================
+//  ====== METAL SLOT RULE ======
+//  =============================
+//
+
+// 
+//METAL 1 SLOT rules check 
+//
+GROUP Metal_slot SLOT.? 
+
+MET1_BLOCK_SLOT = ME1 AND M1SLMK
+MET1_SLOT_TEMP  = HOLES MET1_BLOCK_SLOT
+MET1_SLOT       = MET1_SLOT_TEMP INSIDE M1SLMK
+MET1_SLOT_ALL   = MET1_BLOCK_SLOT OR MET1_SLOT
+
+SLOT.W1_M1 {@ Maximum metal_1 width without slotting when length is greater than 30um is 20um except,
+    @ between metal edge and slots
+    @ spacing between slots
+    @ bonding Pad areas
+    @ MMC layer, Top Metal and Last Second Metal inside MMC area
+   MET1_NOT_PAD = ME1 NOT PAD
+   MET1_EDGE    = MET1_NOT_PAD COINCIDENT INSIDE EDGE ME1 
+   LONG_MET1    = MET1_EDGE LENGTH > 30
+   X = MET1_NOT_PAD WITH EDGE LONG_MET1
+   SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0 
+}
+
+SLOT.W2_M1  {@ Minimum and Maximum Metal-1 Slot width and length
+   @ Min. and Max. Metal-1 slot widths are 2um and 5um respectively
+   @ Min. and Max. Metal-1 slot lengths are 10um and 250um respectively
+   NOT RECTANGLE MET1_SLOT >= 2 <= 5 BY >= 10 <= 250
+}
+
+SLOT.S1_M1  {@ Minimum slot to Metal edge spacing 9 um
+   EXT MET1_SLOT < 9.0 ABUT>0<90 SINGULAR REGION
+}
+
+SLOT.S2_M1  {@ Maximun slot spacing is 20 um
+   SIZE (SIZE MET1_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0
+}
+
+SLOT.S3_M1  {@ Minimum slot to Metal edge spacing 9 um  
+   ENC MET1_SLOT MET1_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION
+}
+
+//6.1E.b_M1 check by 6.1d.b_M1
+
+//
+//METAL 2 SLOT rules check
+//
+MET2_BLOCK_SLOT = ME2 AND M2SLMK
+MET2_SLOT_TEMP  = HOLES MET2_BLOCK_SLOT
+MET2_SLOT       = MET2_SLOT_TEMP INSIDE M2SLMK
+MET2_SLOT_ALL   = MET2_BLOCK_SLOT OR MET2_SLOT
+ 
+SLOT.W1_M2 {@ Maximum metal_2 width without slotting when length is greater than 30um is 20um except,
+    @ between metal edge and slots
+    @ spacing between slots
+    @ bonding Pad areas
+   MET2_NOT_PAD = ME2 NOT PAD
+   MET2_EDGE    = MET2_NOT_PAD COINCIDENT INSIDE EDGE ME2 
+   LONG_MET2    = MET2_EDGE LENGTH > 30
+   X = MET2_NOT_PAD WITH EDGE LONG_MET2
+   SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0
+}
+ 
+SLOT.W2_M2  {@ Minimum and Maximum Metal-2 Slot width and length
+   @ Min. and Max. Metal-2 slot widths are 2um and 5um respectively
+   @ Min. and Max. Metal-2 slot lengths are 10um and 250um respectively
+   NOT RECTANGLE MET2_SLOT >= 2 <= 5 BY >= 10 <= 250
+}
+ 
+SLOT.S1_M2  {@ Minimum slot to Metal edge spacing 9 um
+   EXT MET2_SLOT < 9.0 ABUT>0<90 SINGULAR REGION
+}
+ 
+SLOT.S2_M2  {@ Maximun slot spacing is 20 um
+   SIZE (SIZE MET2_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0
+}
+ 
+SLOT.S3_M2  {@ Minimum slot to Metal edge spacing 9 um
+   ENC MET2_SLOT MET2_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION
+}
+ 
+//6.1E.b_M2 check by 6.1d.b_M2
+
+//
+//METAL 3 SLOT rules check
+//
+MET3_BLOCK_SLOT = ME3 AND M3SLMK
+MET3_SLOT_TEMP  = HOLES MET3_BLOCK_SLOT
+MET3_SLOT       = MET3_SLOT_TEMP INSIDE M3SLMK
+MET3_SLOT_ALL   = MET3_BLOCK_SLOT OR MET3_SLOT
+ 
+SLOT.W1_M3 {@ Maximum metal_3 width without slotting when length is greater than 30um is 20um except,
+    @ between metal edge and slots
+    @ spacing between slots
+    @ bonding Pad areas
+   MET3_NOT_PAD = ME3 NOT PAD
+   MET3_EDGE    = MET3_NOT_PAD COINCIDENT INSIDE EDGE ME3 
+   LONG_MET3    = MET3_EDGE LENGTH > 30
+   X = MET3_NOT_PAD WITH EDGE LONG_MET3
+   SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0
+}
+ 
+SLOT.W2_M3  {@ Minimum and Maximum Metal-3 Slot width and length
+   @ Min. and Max. Metal-3 slot widths are 2um and 5um respectively
+   @ Min. and Max. Metal-3 slot lengths are 10um and 250um respectively
+   NOT RECTANGLE MET3_SLOT >= 2 <= 5 BY >= 10 <= 250
+}
+ 
+SLOT.S1_M3  {@ Minimum slot to Metal edge spacing 9 um
+   EXT MET3_SLOT < 9.0 ABUT>0<90 SINGULAR REGION
+}
+ 
+SLOT.S2_M3  {@ Maximun slot spacing is 20 um
+   SIZE (SIZE MET3_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0
+}
+ 
+SLOT.S3_M3  {@ Minimum slot to Metal edge spacing 9 um
+   ENC MET3_SLOT MET3_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION
+}
+ 
+//
+//METAL 4 SLOT rules check
+//
+MET4_BLOCK_SLOT = ME4 AND M4SLMK
+MET4_SLOT_TEMP  = HOLES MET4_BLOCK_SLOT
+MET4_SLOT       = MET4_SLOT_TEMP INSIDE M4SLMK
+MET4_SLOT_ALL   = MET4_BLOCK_SLOT OR MET4_SLOT
+ 
+SLOT.W1_M4 {@ Maximum metal_4 width without slotting when length is greater than 30um is 20um except,
+    @ between metal edge and slots
+    @ spacing between slots
+    @ bonding Pad areas
+   MET4_NOT_PAD = ME4 NOT PAD
+   MET4_EDGE    = MET4_NOT_PAD COINCIDENT INSIDE EDGE ME4 
+   LONG_MET4    = MET4_EDGE LENGTH > 30
+   X = MET4_NOT_PAD WITH EDGE LONG_MET4
+   SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0
+}
+ 
+SLOT.W2_M4  {@ Minimum and Maximum Metal-4 Slot width and length
+   @ Min. and Max. Metal-4 slot widths are 2um and 5um respectively
+   @ Min. and Max. Metal-4 slot lengths are 10um and 250um respectively
+   NOT RECTANGLE MET4_SLOT >= 2 <= 5 BY >= 10 <= 250
+}
+ 
+SLOT.S1_M4  {@ Minimum slot to Metal edge spacing 9 um
+   EXT MET4_SLOT < 9.0 ABUT>0<90 SINGULAR REGION
+}
+ 
+SLOT.S2_M4  {@ Maximun slot spacing is 20 um
+   SIZE (SIZE MET4_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0
+}
+ 
+SLOT.S3_M4  {@ Minimum slot to Metal edge spacing 9 um
+   ENC MET4_SLOT MET4_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION
+}
+ 
+//6.1E.b_M4 check by 6.1d.b_M4
+
+//
+//METAL 5 SLOT rules check
+//
+  
+MET5_BLOCK_SLOT = ME5 AND M5SLMK
+MET5_SLOT_TEMP  = HOLES MET5_BLOCK_SLOT 
+MET5_SLOT       = MET5_SLOT_TEMP INSIDE M5SLMK 
+MET5_SLOT_ALL   = MET5_BLOCK_SLOT OR MET5_SLOT 
+  
+SLOT.W1_M5 {@ Maximum metal_5 width without slotting when length is greater than 30um is 20um except,                
+    @ between metal edge and slots 
+    @ spacing between slots 
+    @ bonding Pad areas 
+    @ MMC layer
+   MET5_CHK_SLOT = ME5 NOT ( PAD OR MMC )
+   MET5_EDGE    = MET5_CHK_SLOT COINCIDENT INSIDE EDGE ME5 
+   LONG_MET5    = MET5_EDGE LENGTH > 30 
+   X = MET5_CHK_SLOT WITH EDGE LONG_MET5
+   SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0 
+} 
+  
+SLOT.W2_M5  {@ Minimum and Maximum Metal-5 Slot width and length 
+   @ Min. and Max. Metal-5 slot widths are 2um and 5um respectively 
+   @ Min. and Max. Metal-5 slot lengths are 10um and 250um respectively 
+   NOT RECTANGLE MET5_SLOT >= 2 <= 5 BY >= 10 <= 250 
+} 
+   
+SLOT.S1_M5  {@ Minimum slot to Metal edge spacing 9 um 
+   EXT MET5_SLOT < 9.0 ABUT>0<90 SINGULAR REGION 
+} 
+   
+SLOT.S2_M5  {@ Maximun slot spacing is 20 um 
+   SIZE (SIZE MET5_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0 
+} 
+   
+SLOT.S3_M5  {@ Minimum slot to Metal edge spacing 9 um 
+   ENC MET5_SLOT MET5_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION 
+} 
+   
+//6.1E.b_M5 check by 6.1d.b_M5
+
+//
+//METAL 6 SLOT rules check
+//
+  
+MET6_BLOCK_SLOT = ME6 AND M6SLMK 
+MET6_SLOT_TEMP  = HOLES MET6_BLOCK_SLOT  
+MET6_SLOT       = MET6_SLOT_TEMP INSIDE M6SLMK  
+MET6_SLOT_ALL   = MET6_BLOCK_SLOT OR MET6_SLOT
+   
+SLOT.W1_M6 {@ Maximum metal_6 width without slotting when length is greater than 30um is 20um except,                 
+    @ between metal edge and slots  
+    @ spacing between slots  
+    @ bonding Pad areas  
+    @ MMC layer
+   MET6_CHK_SLOT = ME6 NOT ( PAD OR MMC )  
+   MET6_EDGE    = MET6_CHK_SLOT COINCIDENT INSIDE EDGE ME6 
+   LONG_MET6    = MET6_EDGE LENGTH > 30  
+   X = MET6_CHK_SLOT WITH EDGE LONG_MET6  
+   Y = SIZE ( SIZE X BY -10 ) BY 10 TRUNCATE 10.0  
+   Y NOT IND
+}  
+   
+SLOT.W2_M6  {@ Minimum and Maximum Metal-6 Slot width and length  
+   @ Min. and Max. Metal-6 slot widths are 2um and 5um respectively  
+   @ Min. and Max. Metal-6 slot lengths are 10um and 250um respectively  
+   NOT RECTANGLE MET6_SLOT >= 2 <= 5 BY >= 10 <= 250  
+}  
+    
+SLOT.S1_M6  {@ Minimum slot to Metal edge spacing 9 um  
+   EXT MET6_SLOT < 9.0 ABUT>0<90 SINGULAR REGION  
+}  
+    
+SLOT.S2_M6  {@ Maximun slot spacing is 20 um  
+   SIZE (SIZE MET6_BLOCK_SLOT BY -10.00) BY 10.0 TRUNCATE 10.0  
+}  
+    
+SLOT.S3_M6  {@ Minimum slot to Metal edge spacing 9 um  
+   ENC MET6_SLOT MET6_SLOT_ALL < 9.0 ABUT<90 SINGULAR OUTSIDE ALSO REGION  
+}  
+    
+// END OF FILE
+
+
+
+
+

@@ -1,0 +1,24 @@
+$Name drain gate source body cell Lib width lengh
+
+*inverter*
+.subckt inverter VIN VOUT VDD GND
+	MpMos VOUT VIN VDD VDD p_18 W=1u   L=0.18u 
+	MnMos VOUT VIN GND GND n_18 W=0.5u L=0.18u
+.ends
+
+*NAND*
+.subckt NAND A B VOUT VDD GND
+	MpMos_1 VOUT A VDD  VDD p_18 W=1u   L=0.18u
+	MpMos_2 VOUT B VDD  VDD p_18 W=1u   L=0.18u
+	MnMos_3 VOUT A wire GND n_18 W=0.5u L=0.18u
+	MnMos_4 wire B GND  GND n_18 W=0.5u L=0.18u
+.ends
+
+*NOR*
+.subckt NOR C D F VDD GND
+	MpMos_1 wire C VDD  VDD p_18 W=1u   L=0.18u
+	MpMos_2 F    D wire VDD p_18 W=1u   L=0.18u
+	MnMos_3 GND  D F    GND n_18 W=0.5u L=0.18u
+	MnMos_4 GND  C F    GND n_18 W=0.5u L=0.18u
+.ends
+	

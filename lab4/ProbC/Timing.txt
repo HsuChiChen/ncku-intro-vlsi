@@ -1,0 +1,89 @@
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : CONV
+Version: O-2018.06
+Date   : Wed Mar 31 01:06:25 2021
+****************************************
+
+Operating Conditions: slow   Library: slow
+Wire Load Model Mode: top
+
+  Startpoint: w_in_reg[0][1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: out[16] (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  CONV               tsmc13_wl10           slow
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.50       0.50
+  w_in_reg[0][1]/CK (DFFRX4)                              0.00       0.50 r
+  w_in_reg[0][1]/Q (DFFRX4)                               0.58       1.08 f
+  mult_96/a[1] (CONV_DW_mult_uns_8)                       0.00       1.08 f
+  mult_96/U159/Y (XOR2X2)                                 0.28       1.36 r
+  mult_96/U149/Y (INVX8)                                  0.21       1.57 f
+  mult_96/U163/Y (NAND2X8)                                0.18       1.75 r
+  mult_96/U173/Y (NOR2X1)                                 0.14       1.88 f
+  mult_96/U174/Y (OR2X2)                                  0.30       2.19 f
+  mult_96/U175/Y (XOR2X1)                                 0.26       2.45 r
+  mult_96/U186/S (ADDFX1)                                 0.50       2.95 f
+  mult_96/product[3] (CONV_DW_mult_uns_8)                 0.00       2.95 f
+  add_5_root_add_0_root_add_96_I9/A[3] (CONV_DW01_add_2)
+                                                          0.00       2.95 f
+  add_5_root_add_0_root_add_96_I9/U1_3/CO (ADDFXL)        0.69       3.63 f
+  add_5_root_add_0_root_add_96_I9/U1_4/CO (ADDFXL)        0.53       4.16 f
+  add_5_root_add_0_root_add_96_I9/U1_5/CO (ADDFXL)        0.53       4.69 f
+  add_5_root_add_0_root_add_96_I9/U1_6/CO (ADDFX2)        0.40       5.09 f
+  add_5_root_add_0_root_add_96_I9/U1_7/CO (ADDFXL)        0.50       5.60 f
+  add_5_root_add_0_root_add_96_I9/U1_8/CO (ADDFHX2)       0.36       5.95 f
+  add_5_root_add_0_root_add_96_I9/U1/Y (NAND2X1)          0.30       6.25 r
+  add_5_root_add_0_root_add_96_I9/U7/Y (NAND3X6)          0.13       6.38 f
+  add_5_root_add_0_root_add_96_I9/U1_10/CO (ADDFHX2)      0.24       6.62 f
+  add_5_root_add_0_root_add_96_I9/U1_11/CO (ADDFX2)       0.35       6.97 f
+  add_5_root_add_0_root_add_96_I9/U1_12/CO (ADDFX2)       0.37       7.33 f
+  add_5_root_add_0_root_add_96_I9/U1_13/CO (ADDFX2)       0.37       7.70 f
+  add_5_root_add_0_root_add_96_I9/U1_14/S (ADDFHX2)       0.41       8.11 r
+  add_5_root_add_0_root_add_96_I9/SUM[14] (CONV_DW01_add_2)
+                                                          0.00       8.11 r
+  add_1_root_add_0_root_add_96_I9/A[14] (CONV_DW01_add_1)
+                                                          0.00       8.11 r
+  add_1_root_add_0_root_add_96_I9/U3/Y (XOR2X4)           0.20       8.31 r
+  add_1_root_add_0_root_add_96_I9/U2/Y (XOR2X2)           0.24       8.55 f
+  add_1_root_add_0_root_add_96_I9/SUM[14] (CONV_DW01_add_1)
+                                                          0.00       8.55 f
+  add_0_root_add_0_root_add_96_I9/B[14] (CONV_DW01_add_0)
+                                                          0.00       8.55 f
+  add_0_root_add_0_root_add_96_I9/U1/Y (BUFX12)           0.16       8.71 f
+  add_0_root_add_0_root_add_96_I9/U23/Y (NAND2X1)         0.17       8.87 r
+  add_0_root_add_0_root_add_96_I9/U24/Y (NAND2X2)         0.12       8.99 f
+  add_0_root_add_0_root_add_96_I9/U22/Y (INVX3)           0.11       9.10 r
+  add_0_root_add_0_root_add_96_I9/U25/Y (NAND2X6)         0.10       9.20 f
+  add_0_root_add_0_root_add_96_I9/U6/Y (NAND2X2)          0.11       9.31 r
+  add_0_root_add_0_root_add_96_I9/U26/Y (NAND3X2)         0.15       9.46 f
+  add_0_root_add_0_root_add_96_I9/U1_16/Y (XOR3X4)        0.44       9.90 r
+  add_0_root_add_0_root_add_96_I9/SUM[16] (CONV_DW01_add_0)
+                                                          0.00       9.90 r
+  out[16] (out)                                           0.00       9.90 r
+  data arrival time                                                  9.90
+
+  clock clk (rise edge)                                  10.00      10.00
+  clock network delay (ideal)                             0.50      10.50
+  clock uncertainty                                      -0.10      10.40
+  output external delay                                  -0.50       9.90
+  data required time                                                 9.90
+  --------------------------------------------------------------------------
+  data required time                                                 9.90
+  data arrival time                                                 -9.90
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+

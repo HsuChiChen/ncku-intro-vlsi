@@ -1,0 +1,73 @@
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : top
+Version: O-2018.06
+Date   : Sun Apr 11 22:03:44 2021
+****************************************
+
+Operating Conditions: slow   Library: slow
+Wire Load Model Mode: top
+
+  Startpoint: in_mem_data[8]
+              (input port clocked by clk)
+  Endpoint: gray_data[7]
+            (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  top                tsmc13_wl10           slow
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.50       0.50
+  input external delay                                    5.00       5.50 f
+  in_mem_data[8] (in)                                     0.05       5.55 f
+  gray/d[8] (grayscale)                                   0.00       5.55 f
+  gray/U41/Y (AND2X1)                                     0.25       5.80 f
+  gray/U13/CO (ADDFXL)                                    0.49       6.29 f
+  gray/U20/CO (ADDFXL)                                    0.53       6.82 f
+  gray/U21/CO (ADDFXL)                                    0.53       7.34 f
+  gray/U22/CO (ADDFXL)                                    0.53       7.87 f
+  gray/U23/CO (ADDFXL)                                    0.53       8.40 f
+  gray/U24/CO (ADDFXL)                                    0.53       8.93 f
+  gray/U14/S (ADDFXL)                                     0.56       9.49 r
+  gray/U19/CO (ADDFXL)                                    0.86      10.35 r
+  gray/U15/S (ADDFXL)                                     0.62      10.97 r
+  gray/add_0_root_add_0_root_add_33_2/B[8] (grayscale_DW01_add_0)
+                                                          0.00      10.97 r
+  gray/add_0_root_add_0_root_add_33_2/U1_8/CO (ADDFXL)
+                                                          0.86      11.83 r
+  gray/add_0_root_add_0_root_add_33_2/U1_9/CO (ADDFXL)
+                                                          0.50      12.32 r
+  gray/add_0_root_add_0_root_add_33_2/U1_10/S (ADDFXL)
+                                                          0.81      13.13 r
+  gray/add_0_root_add_0_root_add_33_2/SUM[10] (grayscale_DW01_add_0)
+                                                          0.00      13.13 r
+  gray/add_34/A[6] (grayscale_DW01_inc_0)                 0.00      13.13 r
+  gray/add_34/U1_1_6/CO (ADDHXL)                          0.34      13.47 r
+  gray/add_34/U2/Y (XOR2X1)                               0.28      13.76 f
+  gray/add_34/SUM[7] (grayscale_DW01_inc_0)               0.00      13.76 f
+  gray/U12/Y (AO22X2)                                     0.65      14.41 f
+  gray/q[7] (grayscale)                                   0.00      14.41 f
+  gray_data[7] (out)                                      0.00      14.41 f
+  data arrival time                                                 14.41
+
+  clock clk (rise edge)                                  20.00      20.00
+  clock network delay (ideal)                             0.50      20.50
+  clock uncertainty                                      -0.10      20.40
+  output external delay                                  -0.50      19.90
+  data required time                                                19.90
+  --------------------------------------------------------------------------
+  data required time                                                19.90
+  data arrival time                                                -14.41
+  --------------------------------------------------------------------------
+  slack (MET)                                                        5.49
+
+

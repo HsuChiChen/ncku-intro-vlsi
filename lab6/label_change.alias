@@ -1,0 +1,11 @@
+alias	alias_tab_1
+  INIT		3'b000		NULL
+  READ_W		3'b001		NULL
+  READ_9		3'b010		ID_RED4
+  READ_C		3'b011		ID_PURPLE5
+  WRITE_C		3'b100		ID_YELLOW5
+  READ_P		3'b101		NULL
+  WRITE_P		3'b110		NULL
+  DONE		3'b111		NULL
+endalias
+

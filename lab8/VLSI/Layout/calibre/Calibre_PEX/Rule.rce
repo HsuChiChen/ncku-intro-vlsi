@@ -1,0 +1,1630 @@
+//   Title     : LVS(Calibre) of 0.18um 1.8V/3.3V 1P4M/1P5M/1P6M Mixed Mode/RF Process 
+//   Ref. Document  : 
+//	CIC 0.18um 1.8V/3.3V 1P6M Virtual Mixed Mode/RFCMOS Process Design Rule			Ver:1.0
+//	CIC 0.18um 1.8V/3.3V 1P6M Virtual Mixed Mode/RFCMOS Process Electrical Design Rule	Ver:1.0
+//
+// HISTORY
+//====================================================================
+// 1.0   06/06/05	W. S. Chang
+// 1.1   02/20/09	K. C. Peng
+//==================================================================
+// NOTES 
+// =====================================
+// 1. Netlist elements include:
+//    a. MOS Devices :
+//       . 1.8V MOS device (P_18/N_18)
+//       . 3.3V MOS device (P_33/N_33)
+//       . 1.8V low Vt MOS device (P_LV_18/N_LV_18)
+//       . 3.3V low Vt MOS device (P_LV_33/N_LV_33)
+//       . 1.8V zero Vt NMOS device (N_ZERO_18)
+//       . 3.3V zero Vt NMOS device (N_ZERO_33)
+//       . 1.8V NMOS devices in Deep NWell(N_BPW_18)
+//       . 3.3V NMOS devices in Deep NWell(N_BPW_33)
+//    b. Resistor Elements :
+//       . N-Well Resistor  
+//         - 2 terminal Logic N-Well sheet resistor  (RSNWELL)
+//         - 3 terminal Mixed Mode N-Well sheet resistor  (RSNWELL_MM)
+//       . Non-Salicide Resistors
+//         - 2 terminal N+ sheet resistor    (RNND)
+//         - 2 terminal P+ sheet resistor    (RNPD)
+//         - 2 terminal N+ Poly sheet resistor (RNNPO)
+//         - 2 terminal P+ Poly sheet resistor (RNPPO)
+//         - 3 terminal HR Ploy Sheet resistor (RNHR1000_MM)
+//       . Salicide Resistors
+//         - 2 terminal N+ sheet resistor (RSND)
+//         - 2 terminal P+ sheet resistor (RSPD)
+//         - 2 terminal N+ Poly sheet resistor (RSNPO)
+//         - 2 terminal P+ Poly sheet resistor (RSPPO)
+//       . Metal Resistors
+//         - 2 terminal Metal 1 resistor (RM1)
+//         - 2 terminal Metal 2 resistor (RM2)
+//         - 2 terminal Metal 3 resistor (RM3)
+//         - 2 terminal Metal 4 resistor (RM4)
+//         - 2 terminal Metal 5 resistor (RM5)
+//         - 2 terminal Metal 6 resistor (RM6)
+//    c. MIM Capacitor :
+//       . Metal5 MMC Capacitor (MIMCAPS)
+//    d. MIS Varactor
+//    f. Diode
+//       . P+/N-Well Diode (DP)
+//       . N+/P-Well Diode (DN)
+
+//    g. BJT
+//       . pnp Bipolar Transistor(5*5)        (PNP_V50X50)
+//       . pnp Bipolar Transistor(10*10)      (PNP_V100X100)
+//    h. Inductor 
+//	 . Circular Inductor(L_SLCR20K)
+//
+// 7. If devices dimension needed to be checked, uncomment the "//" in 
+//    TRACE PROPERTY statement.
+// 9. It is not allowed that metal layer routing crosses a metal resistor.
+//12. Options:
+//	- Top Metal Thickness(Default: 20K)
+//	  To switch LVS to 8k, please adding double slashes ahead of 
+//	    "#DEFINE TOP_METAL_20K".
+//13. If your CALIBRE Version can not be compatible with XRC, please modify SVDB output format from "XCALIBRE" to "XRC"
+//////////////////////////////////////////////////////////////////////
+
+ TITLE "LVS Ver 1.2 P8 of CIC 0.18um 1.8V/3.3V 1P6M MMC Mixed Mode/RFCMOS Process"
+
+///////////////////////////
+// SPECIFICATION STATEMENTS
+///////////////////////////
+
+
+//Top Metal Thickness Option( Default: 8K )
+#DEFINE TOP_METAL_THICKNESS_20K
+
+				//////////////////////////////////////////////////
+#DEFINE PEXRUN                // TO RUN RC, Please turn on it.		//
+        			//////////////////////////////////////////////////
+
+
+SOURCE PATH      "test.cdl"
+SOURCE PRIMARY   "test"
+SOURCE SYSTEM    SPICE
+
+LAYOUT PATH      "test.gds" 
+LAYOUT PRIMARY   "test"
+
+LAYOUT SYSTEM    GDSII
+
+LVS REPORT       lvs.rep
+
+
+UNIT LENGTH                        U
+UNIT CAPACITANCE                   FF
+UNIT RESISTANCE                    OHM
+UNIT TIME                          US
+
+PRECISION                          1000
+RESOLUTION                         1
+
+
+
+DRC RESULTS DATABASE "calibre_drc.db" ASCII
+DRC MAXIMUM RESULTS ALL
+
+/////////////////////////
+// Setup Defaults for LVS
+/////////////////////////
+LVS POWER NAME                   VCC VDD VDD3V DVDD V3IO V2IO DVDD
+LVS GROUND NAME                  VSS GND VBB V0IO DGND
+LVS REPORT OPTION                A B C D S
+LVS REPORT MAXIMUM               50
+LVS IGNORE PORTS                 YES //NO
+LVS ALL CAPACITOR PINS SWAPPABLE NO
+LVS ABORT ON SUPPLY ERROR        NO //YES
+//LVS COMPARE CASE                 NAMES
+LVS REDUCE PARALLEL BIPOLAR      YES
+LVS REDUCE PARALLEL CAPACITORS   YES
+LVS REDUCE PARALLEL DIODES       YES
+LVS REDUCE PARALLEL MOS          YES
+LVS REDUCE PARALLEL RESISTORS    YES
+LVS REDUCE SERIES CAPACITORS     YES
+LVS REDUCE SERIES RESISTORS      YES
+LVS REDUCE SPLIT GATES           NO
+LVS RECOGNIZE GATES              NONE
+LVS EXPAND UNBALANCED CELLS      YES
+LVS FILTER UNUSED OPTION         AB RC RE RG
+LVS ISOLATE SHORTS               YES BY LAYER 
+FLAG NONSIMPLE                   YES
+
+/////////////////////////
+// INPUT LAYER STATEMENTS
+/////////////////////////
+
+LAYER DIFF        1     // Thin Oxide / Diffusion region
+LAYER NWEL        3     // N-Well
+LAYER TWEL        6     // T-Well
+LAYER PPLUS      11     // P+ & P channel gate area
+LAYER NPLUS      12     // N+ & N channel gate area
+
+LAYER VTPL       20     // Optional for 1.8V low Vt PMOS Device
+LAYER VTPHL      21     // Optional for 3.3V low Vt PMOS Device
+LAYER VTNL       22     // Optional for 1.8V low Vt NMOS or 3.3V zero Vt NMOS Device
+LAYER VTNI       23     // Optional for 1.8V zero Vt NMOS Device
+LAYER VTNHL      24     // Optional for 3.3V low Vt NMOS Device
+
+LAYER SAB        36     // Salicide block
+LAYER TG         37     // 3.3V gate oxide
+LAYER HR         38     // High resistor
+
+LAYER CONT       39     // Contact
+LAYER NWR	40	//N-well Resistor
+LAYER PO1        41     // Poly gate & interconnect
+
+LAYER ME1        46     // Metal-1 interconnect
+LAYER VI1        47     // Metal-2 to Metal-1 contact
+LAYER ME2        48     // Metal-2 interconnect
+LAYER VI2        49     // Metal-3 to Metal-2 contact
+LAYER ME3        50     // Metal-3 interconnect
+LAYER VI3        51     // Metal-4 to Metal-3 contact
+LAYER ME4        52     // Metal-4 interconnect
+LAYER VI4        53     // Metal-5 to Metal-4 contact
+LAYER ME5        54     // Metal-5 interconnect
+LAYER VI5        55     // Metal-6 to Metal-5
+LAYER ME6        56     // Metal-6 interconnect
+
+LAYER MMC        65     // Top plate of metal/metal capacitor
+LAYER PAD        66     // Bond pad openings
+
+LAYER RSYMBOL    81     // Diffusion Resistor Marker Layer
+LAYER PSYMBOL    82     // Poly Resistor Marker Layer
+LAYER WSYMBOL    83     // Well Resistor Marker Layer
+
+LAYER PO_TEXT    100    // Poly Text Layer
+LAYER M1_TEXT    101    // Metal-1 Text Layer
+LAYER M2_TEXT    102    // Metal-2 Text Layer
+LAYER M3_TEXT    103    // Metal-3 Text Layer
+LAYER M4_TEXT    104    // Metal-4 Text Layer
+LAYER M5_TEXT    105    // Metal-5 Text Layer
+LAYER M6_TEXT    106    // Metal-6 Text Layer
+
+LAYER VSTRES      92    // VST Resistor Marker Layer
+LAYER XDIODE      96    // Ignore Diode Marker Layer
+LAYER IRAM        97    // SRAM cell array marker
+LAYER SEPGND      99     // seperate ground
+
+//LAYER IRAM     500    // Not to use IRAM=97 for Artisan DP SRAM cell
+
+LAYER MRSYMBOL    311    // Metal Resistor Marker Layer
+LAYER MAP  111  datatype 30  311
+
+LAYER CSYMBOL    341    // capacitor Marker Layer
+LAYER MAP  112  datatype 30  341
+
+LAYER MCAP	312	// P-Well Implant Block Layer in MMC capacitor
+LAYER MAP  112  datatype 36  312
+
+LAYER IND  	317 	// P-Well Implant Block Layer in Inductor area
+LAYER MAP  117  datatype 36  317
+
+LAYER BJTSYMBOL        511    // BJT Marker Layer
+LAYER MAP  113  datatype 30  511
+
+LAYER DSYMBOL    371    // Diode Marker Layer
+LAYER MAP  114  datatype 30  371
+
+LAYER LSYMBOL    401    // Inductor Marker Layer
+LAYER MAP  117  datatype 30  401
+
+LAYER MMSYMBOL   431    // Mixed mode Device Marker Layer
+LAYER MAP  118  datatype 30  431
+
+LAYER RFSYMBOL    461    // RF Device Marker Layer
+LAYER MAP  119  datatype 30  461
+
+LAYER SIZE1    471    // Size 1 Marker Layer
+LAYER MAP  111  datatype 33  471
+
+LAYER SIZE2    472    // Size 2 Marker Layer
+LAYER MAP  112  datatype 33  472    
+
+TEMP	= COPY PAD
+NULL1 	= PAD NOT TEMP
+NULL2   = COPY NULL1
+
+ATTACH PO_TEXT PLY_C
+ATTACH PO_TEXT PLY_I
+ATTACH M1_TEXT ME1_NORES
+ATTACH M2_TEXT ME2_NORES
+
+ME2_C   = COPY ME2_NORES
+ME1_C	= COPY ME1_NORES
+
+#IFDEF TOP_METAL_ME4
+    TOP_M 	 = COPY ME4_NORES
+    SEC_LAST_MET = COPY ME3_NORES
+    TOP_VIA	 = COPY VI3
+    TOP_VIA_MMC	 = VI3 AND MMC
+    TOP_VIA_SLM	 = VI3 NOT INTERACT MMC
+
+    ME6_C	 = COPY ME6_NORES  // Meaningless, to avoid errors as compiling
+    ME5_C	 = COPY ME5_NORES  // Meaningless, to avoid errors as compiling
+    ME4_C	 = COPY TOP_M_C
+    ME3_C	 = COPY SEC_LAST_MET_C
+
+    ATTACH M3_TEXT SEC_LAST_MET_C
+    ATTACH M4_TEXT TOP_M_C
+#ELSE
+	#IFDEF TOP_METAL_ME5
+    	    TOP_M 	 = COPY ME5_NORES
+    	    SEC_LAST_MET = COPY ME4_NORES
+	    TOP_VIA	 = COPY VI4
+   	    TOP_VIA_MMC	 = VI4 AND MMC
+    	    TOP_VIA_SLM	 = VI4 NOT INTERACT MMC
+
+	    ME6_C  = COPY ME6_NORES // Meaningless, to avoid errors as compiling
+	    ME5_C  = COPY TOP_M_C
+	    ME4_C  = COPY SEC_LAST_MET_C
+	    ME3_C  = COPY ME3_NORES
+	    	    
+	    ATTACH M3_TEXT ME3_NORES
+	    ATTACH M4_TEXT SEC_LAST_MET_C
+	    ATTACH M5_TEXT TOP_M_C
+#ELSE 
+    	    TOP_M 	 = COPY ME6_NORES
+    	    SEC_LAST_MET = COPY ME5_NORES
+	    TOP_VIA	 = COPY VI5
+    	    TOP_VIA_MMC	 = VI5 AND MMC
+    	    TOP_VIA_SLM	 = VI5 NOT INTERACT MMC
+    	    
+    	    ME6_C  = COPY TOP_M_C
+    	    ME5_C  = COPY SEC_LAST_MET_C
+    	    ME4_C  = COPY ME4_NORES
+    	    ME3_C  = COPY ME3_NORES
+
+	    ATTACH M3_TEXT ME3_NORES
+	    ATTACH M4_TEXT ME4_NORES
+	    ATTACH M5_TEXT SEC_LAST_MET_C 
+	    ATTACH M6_TEXT TOP_M_C
+	#ENDIF
+#ENDIF
+
+///////////////////////////////
+// Map TEXT layer to port names
+///////////////////////////////
+TEXT DEPTH      PRIMARY
+PORT LAYER TEXT PO_TEXT M1_TEXT M2_TEXT M3_TEXT M4_TEXT M5_TEXT M6_TEXT
+TEXT LAYER      PO_TEXT M1_TEXT M2_TEXT M3_TEXT M4_TEXT M5_TEXT M6_TEXT
+
+// LABEL ORDER ME6_C MMC ME5_C ME4_C ME3_C ME2_C ME1_C
+
+VIRTUAL CONNECT COLON YES
+VIRTUAL CONNECT NAME VSS GND VDD VDD3V DVDD VCC
+
+LAYOUT TOP LAYER PAD ME6 VI5 ME5 VI4 ME4 VI3 ME3 VI2 ME2 VI1 ME1
+
+///////////////////////////////////
+// LAYER DERIVATIONS AND OPERATIONS
+///////////////////////////////////
+DRC:1 = EXTENT
+BULK  = SIZE DRC:1 BY 1.0
+
+SEPGND:1 = SIZE SEPGND BY 0.01
+SEPGND:2 = SEPGND:1 NOT SEPGND
+PSUB_ALL = (BULK   NOT NWEL) NOT TWEL   
+PSUB     = PSUB_ALL NOT SEPGND:2
+
+BPDIFF = DIFF   AND PPLUS   
+BNDIFF = DIFF   AND NPLUS   
+PGATE  = BPDIFF AND PO1     
+NGATE  = BNDIFF AND PO1    
+BPGATE = size (size (PGATE  NOT PSYMBOL) by -0.05) by 0.05  
+BNGATE = size (size (NGATE  NOT PSYMBOL) by -0.05) by 0.05   
+NWELL  = NWEL   NOT TWEL    
+
+PTAP   = PSUB  AND  PSD
+NTAP   = WEL   AND  NSD
+TNTAP  = PSD   AND  (NWEL AND TWEL)
+
+
+
+/////////////////////////
+// Setup Defaults for PEX
+/////////////////////////
+#IFDEF PEXRUN
+#IFDEF TOP_METAL_THICKNESS_20K
+ INCLUDE "Rule_20KA.rc"
+#ELSE
+  INCLUDE "Rule_08KA.rc"
+#ENDIF
+PEX FDB allnets GLOBAL 5000  EXCLUDE SOURCE VCC GND
+PEX BACKANNOTATION DISTRIBUTED NONE
+PEX BACKANNOTATION LUMPED      NONE
+PEX BACKANNOTATION SIMPLE      none
+PEX COUPLED DISTRIBUTED        NO // MASK DIRECT
+PEX DELAY                      none   //PENFIELD 0.7 MASK DIRECT
+PEX EXCLUDE DISTRIBUTED        VDD GND VSS VCC VBB MASK DIRECT
+PEX EXCLUDE LUMPED             VDD GND VSS VCC VBB MASK DIRECT
+PEX NETLIST DISTRIBUTED        "net.dist" SPICE LAYOUT MASK DIRECT LOCATION LOOP
+PEX NETLIST LUMPED             "net.lump" SPICE LAYOUT MASK DIRECT LOCATION
+PEX NETLIST SIMPLE             "net.simple" SPICE LAYOUT MASK DIRECT LOCATION
+PEX REPORT DISTRIBUTED         none  //"report.dist" ASCII LAYOUT MASK DIRECT
+PEX REPORT LUMPED              none  //"report.lump" LAYOUT MASK DIRECT
+PEX RESISTANCE LUMPED          YES MASK // DIRECT
+PEX REDUCE LUMPED C            < 10000000
+
+MASK SVDB DIRECTORY svdb XRC
+
+////////////For XCalibre////////////////////////
+//LAYER  dummy        1111    // Dummy Layer for XCalibre
+//ALLGATE0 = ((((NG_SP OR PG_SP) OR NG_TGSP) OR PG_TGSP) OR VST_NBIT) // OR VST_PBIT
+//ALLGATE1 = ((((ALLGATE0 OR MNGATE) OR MPGATE) OR NTGATE) OR PTGATE) OR NLGATE
+//ALLGATE2 = ((((ALLGATE1 OR PLGATE) OR NHGATE) OR PHLGATE) OR NIGATE) OR NJGATE
+//ALLGATE3 = ((((ALLGATE2 OR NSGATE) OR TGNSGATE) OR MNGATE_RF) OR MNGATE_SRF) OR MPGATE_RF
+//ALLGATES     = (((((ALLGATE3 OR MPGATE_SRF) OR NTGATE_RF) OR PTGATE_RF) OR VARGATE) OR NTGATE_SRF) OR PTGATE_SRF
+//CONNECT ALLGATES  dummy
+//////////// For XCalibre////////////////////////
+
+//CONNECT ALLGATES PLY 
+
+#ELSE // For RVE Purpose 
+MASK SVDB DIRECTORY svdb QUERY 
+#ENDIF
+
+
+//-----------------------------
+// Define P+ diffusion resistor
+//-----------------------------
+
+PDRES       = BPDIFF AND (RSYMBOL OR VSTRES)           
+NSPSRES     = (PDRES AND SAB) INSIDE NWELL 
+SPSRES:1    = (PDRES  NOT NSPSRES) NOT INTERACT SAB 
+SPSRES      = SPSRES:1 INSIDE NWELL
+RPDS     = BPDIFF NOT PDRES  
+PSD      = RPDS   NOT BPGATE 
+
+SPRES:1 = SPSRES COINCIDENT OUTSIDE EDGE PSD
+SPRES:2 = EXPAND EDGE SPRES:1 OUTSIDE BY 0.05
+SPRES:3 = SPRES:2 AND CONT
+SPRES:4 = SPRES:2 INTERACT SPRES:3
+PSD_C:1   = STAMP SPRES:4 BY PSD_C
+
+//-----------------------------
+// Define N+ diffusion resistor
+//-----------------------------
+
+NDRES       = BNDIFF AND (RSYMBOL OR VSTRES)  
+NSNSRES     = (NDRES AND SAB) NOT INSIDE  NWELL     
+SNSRES:1    = (NDRES  NOT NSNSRES) NOT INTERACT SAB   
+SNSRES      = SNSRES:1 NOT INTERACT NWELL  
+RNDS     = BNDIFF NOT NDRES     
+NSD      = RNDS   NOT BNGATE 
+
+SNRES:1 = SNSRES COINCIDENT OUTSIDE EDGE  NSD
+SNRES:2 = EXPAND EDGE SNRES:1 OUTSIDE BY 0.05
+SNRES:3 = SNRES:2 AND CONT
+SNRES:4 = SNRES:2 INTERACT SNRES:3
+NSD_C:1   = STAMP SNRES:4 BY NSD_C
+
+//-----------------------------
+// Define Poly resistor
+//-----------------------------
+
+PYRES      = PO1   AND ((PSYMBOL OR VSTRES) OR RSYMBOL) 
+SPYRES     = PYRES  AND SAB      
+HRPYR      = (SPYRES AND HR) INTERACT PPLUS       
+NSHRPYR    = (HRPYR  AND NWELL) NOT INTERACT RFSYMBOL     
+NSHRPYR_RF = (HRPYR  AND NWELL) INTERACT RFSYMBOL
+
+APYRES     = PYRES  NOT HRPYR  
+PPYRES     = APYRES AND PPLUS    
+NSAPYR     = PPYRES AND SAB      
+NSPPYR     = (NSAPYR AND NWELL) NOT INTERACT (MMSYMBOL OR RFSYMBOL)  
+NSPPYR_MM  = (NSAPYR AND NWELL) INTERACT MMSYMBOL
+NSPPYR_RF  = (NSAPYR AND NWELL) INTERACT RFSYMBOL
+SPPYR      = (PPYRES NOT INTERACT SAB) NOT INTERACT MMSYMBOL 
+SPPYR_MM   = (PPYRES NOT INTERACT SAB) INTERACT MMSYMBOL
+
+NPYRES     = APYRES AND NPLUS   
+NSBPYR     = NPYRES AND SAB     
+NSNPYR     = (NSBPYR NOT NWELL) NOT INTERACT (MMSYMBOL OR RFSYMBOL) 
+NSNPYR_MM  = (NSBPYR NOT NWELL) INTERACT MMSYMBOL 
+NSNPYR_RF  = (NSBPYR NOT NWELL) INTERACT RFSYMBOL
+SNPYR      = (NPYRES NOT INTERACT SAB) NOT INTERACT MMSYMBOL 
+SNPYR_MM   = (NPYRES NOT INTERACT SAB) INTERACT MMSYMBOL 
+PLY        = (PO1  NOT  PYRES) NOT ((SAB NOT PPLUS) NOT NPLUS)   
+
+//-----------------------
+// Define N-well resistor
+//-----------------------
+
+WELRES    = (NWELL  AND  (NWR OR VSTRES) ) NOT INTERACT PPLUS
+WELRES_MM = ((NWELL  AND  (NWR OR VSTRES) ) NOT INTERACT PPLUS) INTERACT MMSYMBOL
+WEL       = NWELL  NOT  (WELRES OR WELRES_MM)
+
+//-----------------------
+// Define Metal resistor
+//-----------------------
+
+ME1RES        = ME1  AND  MRSYMBOL
+ME1_NORES     = ME1  NOT  ME1RES
+
+ME2RES        = ME2  AND  MRSYMBOL 
+ME2_NORES     = ME2  NOT  ME2RES  
+
+ME3RES        = ME3  AND  MRSYMBOL
+ME3_NORES     = ME3  NOT  ME3RES
+
+ME4RES        = ME4  AND  MRSYMBOL
+ME4_NORES     = ME4  NOT  ME4RES
+
+ME5RES        = ME5  AND  MRSYMBOL 
+ME5_NORES     = ME5  NOT  ME5RES
+
+ME6RES        = ME6  AND  MRSYMBOL 
+ME6_NORES     = ME6  NOT  ME6RES
+
+
+//------------------------------
+// Define P+/N-Well Diode
+//------------------------------
+
+PACT      = PSD      AND  NWELL
+DPDIOD:1  = PACT     NOT  INTERACT PO1
+DPDIOD:2  = DPDIOD:1 NOT  INTERACT RSYMBOL
+DPDIOD:3  = DPDIOD:2 NOT  BJTSYMBOL
+DPDIOD    = (DPDIOD:3 INTERACT MMSYMBOL) NOT INTERACT  (XDIODE OR CSYMBOL)  
+
+DP_SP     = DPDIOD:3 NOT INTERACT  (XDIODE OR CSYMBOL)        
+
+PNVAR     = (DPDIOD:3 NOT  INTERACT  XDIODE) INTERACT CSYMBOL
+
+VW1 = GROW PNVAR RIGHT BY 0.01
+VL1 = GROW PNVAR TOP   BY 0.01
+//------------------------------
+// Define N+/P-well Diode
+//------------------------------
+
+NACT     = NSD  AND  PSUB
+DNDIOD:1 = NACT NOT INTERACT PO1
+DNDIOD:2 = DNDIOD:1 NOT INTERACT RSYMBOL
+DNDIOD:3 = DNDIOD:2 NOT BJTSYMBOL
+DNDIOD   = (DNDIOD:3 INTERACT MMSYMBOL) NOT INTERACT XDIODE
+
+DN_SP   = DNDIOD:3 NOT INTERACT XDIODE
+
+//------------------------------
+// Define MIS N+ N-Well Varactor
+//------------------------------
+
+VARGATE     = ((NCOMP_NORES AND PLY) AND WEL) INSIDE RFSYMBOL 
+VAR_NWEL    = WEL AND (PLY INTERACT VARGATE)
+NCOMP_NORES = BNDIFF  NOT  NDRES
+// NWNDIFF:1   = WEL     AND  NSD
+// NWNDIFF     = NWNDIFF:1  NOT MNGATE
+
+//-----------------------
+// Define Devices
+//-----------------------
+
+RBNGAT  = (BNGATE NOT INTERACT IRAM) NOT ((((TG OR VTNL) OR VTNI) OR VTNHL) OR VARGATE) 
+RBPGAT  = (BPGATE NOT INTERACT IRAM) NOT ((TG OR VTPL) OR VTPHL)
+
+TGBNGAT = (BNGATE  AND TG) NOT (VTNHL OR VTNL) 
+NLGATE:1= (BNGATE  NOT TG)  AND VTNL  
+NHLGATE = (BNGATE  AND TG)  AND VTNHL
+NIGATE:1= (BNGATE  NOT TGBNGAT) AND VTNI
+NHIGATE = (BNGATE  AND TG)  AND VTNL
+
+//-----------------------
+
+NG_SP  = RBNGAT  NOT  TWEL  
+PG_SP  = RBPGAT  NOT  TWEL
+
+NG_TGSP  = TGBNGAT  NOT TWEL
+PG_TGSP  = (BPGATE  AND TG) NOT VTPHL
+
+//VST_PBIT   = size (size (BPGATE AND IRAM) by -0.02) by 0.02
+//VST_NBIT   = size (size (BNGATE AND IRAM) by -0.02) by 0.02
+
+MNGATE  = ((RBNGAT   NOT TWEL) INTERACT MMSYMBOL) NOT INTERACT RFSYMBOL  
+MPGATE  = ((RBPGAT   NOT TWEL) INTERACT MMSYMBOL) NOT INTERACT RFSYMBOL     
+
+NTGATE  = ((TGBNGAT  NOT TWEL) INTERACT MMSYMBOL) NOT INTERACT RFSYMBOL
+PTGATE = (((BPGATE  AND TG) NOT VTPHL) INTERACT MMSYMBOL) NOT INTERACT RFSYMBOL
+
+NLGATE  = NLGATE:1 NOT TWEL
+PLGATE  = (BPGATE  NOT TG)  AND VTPL
+
+NHGATE  = NHLGATE  NOT TWEL
+PHLGATE = (BPGATE  AND TG)  AND VTPHL
+
+NIGATE  = NIGATE:1 NOT TWEL
+NJGATE  = NHIGATE  NOT TWEL
+
+NSGATE    = (RBNGAT  AND TWEL) INSIDE NWEL
+TGNSGATE  = (TGBNGAT  AND TWEL) INSIDE NWEL
+
+MNGATE_RF   = ((RBNGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE2  
+MNGATE_SRF  = ((RBNGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE1
+MPGATE_RF   = ((RBPGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE2   
+MPGATE_SRF  = ((RBPGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE1   
+
+NTGATE_RF  = ((TGBNGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE2
+NTGATE_SRF  = ((TGBNGAT NOT TWEL) INTERACT RFSYMBOL) INTERACT SIZE1
+PTGATE_RF = (((BPGATE  AND TG) INTERACT RFSYMBOL) NOT VTPHL) INTERACT SIZE2
+PTGATE_SRF = (((BPGATE  AND TG) INTERACT RFSYMBOL) NOT VTPHL) INTERACT SIZE1
+
+//-----------------------
+// Define BJT
+//-----------------------
+
+BJTPOD     = PSD_C  AND BJTSYMBOL 
+BJTNOD     = NSD_C  AND BJTSYMBOL
+QTE        = BJTPOD INSIDE NWELL
+QTB        = BJTNOD INSIDE NWELL
+QTC        = BJTPOD NOT INSIDE NWELL
+
+ACTBJT:1   = QTC INTERACT SIZE1 
+ACTBJT5    = HOLES  ACTBJT:1
+ACTBJT:2   = QTC INTERACT SIZE2
+ACTBJT10   = HOLES  ACTBJT:2
+
+
+//-----------------------
+// Define Inductor using Top Metal
+//-----------------------
+TOP_M_L1  	= (TOP_M  AND  LSYMBOL) AND IND // spiral inductor
+SLM_LL1    	= SEC_LAST_MET AND  LSYMBOL
+TOP_VIA_L	= (TOP_VIA INTERACT TOP_M_L1) INTERACT SLM_LL1
+TOP_M_L		= TOP_M_L1 INTERACT TOP_VIA_L
+SLM_LL		= SLM_LL1 INTERACT TOP_VIA_L
+
+IND_ME    	= TOP_M_L OR SLM_LL
+TOP_M_C   	= TOP_M NOT  IND_ME
+SEC_LAST_MET_C 	= SEC_LAST_MET NOT IND_ME
+
+//TOP_M_C1   = TOP_M_C TOUCH IND_ME
+//TOP_M_C    = STAMP TOP_M_C1 BY TOP_M_C
+
+// due to spiral inductor round off, resize TOP_M_L to check width and spacing
+TOP_M_LB     = SIZE TOP_M_L BY 0.1
+TOP_M_LS     = SIZE TOP_M_L BY -0.1
+
+SLM_LT     = (SEC_LAST_MET AND TOP_M_L) INTERACT TOP_VIA
+SLM_L      = SEC_LAST_MET INTERACT TOP_M_L
+
+SLM_L1     = ((SLM_L NOT SLM_LT) NOT TOP_M_L) NOT INTERACT TOP_VIA
+SLM_L2     = (SLM_L AND TOP_M_L) NOT INTERACT SLM_LT
+IND_SUB	   = PSUB AND IND
+
+IND_SQR	  = VERTEX IND_ME < 100
+CROSS	  = VERTEX SLM_L2 ==4
+IND1 	  = IND_ME NOT IND_SQR
+IND_SYM	  = IND1 INTERACT CROSS
+IND_CR    = IND1 NOT IND_SYM
+
+IND_D1	  = HOLES IND_SYM 
+IND_D2	  = EXTENTS( IND_D1 INTERACT ME4 == 1 )
+
+LDIMETER   = EXTENTS (IND_ME NOT IND_SYM)
+
+IND_PIN	   = TOP_M_C AND TOP_M_LB
+IND_MINUS1 = VERTEX TOP_M_L < 16
+IND_MINUS  = IND_PIN INTERACT IND_MINUS1
+IND_PLUS   = IND_PIN NOT IND_MINUS
+
+//----------------------- 
+// Define MIM Capacitor 
+//----------------------- 
+
+CMMC 	   =  MMC  AND  SEC_LAST_MET_C 
+//CMMC_MSQ   =  (CMMC INTERACT RFSYMBOL) INSIDE (ME1 OR MCAP)
+//CMMC_MM    =  CMMC INTERACT MMSYMBOL
+
+CW1 = GROW CMMC RIGHT BY 0.01
+CL1 = GROW CMMC TOP   BY 0.01
+
+//=============================
+//   Define RF PAD
+//=============================
+RF_PAD	= ((TOP_M_C AND PAD) AND ME1_NORES) AND RFSYMBOL
+RF_PAD1 = SHRINK RF_PAD TOP BY 0.01
+MARK1	= RF_PAD NOT RF_PAD1
+
+RF_PADB	= SHRINK RF_PAD1 TOP BY 0.01
+RF_PAD2	= SHRINK RF_PADB TOP BY 0.01
+MARK2	= RF_PADB NOT RF_PAD2
+
+RF_PADC	= SHRINK RF_PAD2 TOP BY 0.01
+RF_PAD3	= SHRINK RF_PADC TOP BY 0.01
+MARK3	= RF_PADC NOT RF_PAD3
+
+RF_PADD	= SHRINK RF_PAD3 TOP BY 0.01
+RF_PAD4	= SHRINK RF_PADD TOP BY 0.01
+MARK4	= RF_PADD NOT RF_PAD4
+
+MARK5	= SHRINK RF_PAD4 TOP BY 0.01
+
+TYPE1	= COPY RF_PAD
+
+#IFDEF TOP_METAL_ME4
+  TYPE2	= TYPE1 INTERACT (ME3_C INTERACT (VI3 INTERACT TYPE1))
+  TYPE3	= TYPE2 INTERACT (ME2_C INTERACT (VI2 INTERACT TYPE2))
+
+  TYPE4 	= TYPE3 NOT PAD		// TYPE4 = nothing
+  TYPE5	= COPY TYPE4		// TYPE5 = nothing
+#ELSE
+  #IFDEF TOP_METAL_ME4
+    TYPE2 = TYPE1 INTERACT (ME4_C INTERACT (VI4 INTERACT TYPE1))
+    TYPE3 = TYPE2 INTERACT (ME3_C INTERACT (VI3 INTERACT TYPE2))
+    TYPE4 = TYPE3 INTERACT (ME2_C INTERACT (VI2 INTERACT TYPE3))
+
+    TYPE5 = TYPE4 NOT PAD	// TYPE5 = nothing
+  #ELSE
+    TYPE2 = TYPE1 INTERACT (ME5_C INTERACT (VI5 INTERACT TYPE1))
+    TYPE3 = TYPE2 INTERACT (ME4_C INTERACT (VI4 INTERACT TYPE2))
+    TYPE4 = TYPE3 INTERACT (ME3_C INTERACT (VI3 INTERACT TYPE3))
+    TYPE5 = TYPE4 INTERACT (ME2_C INTERACT (VI2 INTERACT TYPE4))
+  #ENDIF
+#ENDIF
+
+INDEX1	= MARK1 AND TYPE1
+INDEX2	= MARK2 AND TYPE2
+INDEX3	= MARK3 AND TYPE3
+INDEX4	= MARK4 AND TYPE4
+INDEX5	= MARK5 AND TYPE5
+INDEXA	= (((INDEX1 OR INDEX2) OR INDEX3) OR INDEX4) OR INDEX5
+
+
+
+///////////////////////////////
+// Establish Layer Connectivity
+///////////////////////////////
+#IFDEF TOP_METAL_ME4
+	CONNECT	NULL1		ME6_NORES  //Meaningless, to avoid compilation
+	CONNECT NULL2		ME5_NORES  // errror at metal resistor sectio
+
+	CONNECT TOP_M_C	  MMC_C	BY TOP_VIA_MMC
+	CONNECT TOP_M_C   MMC_I BY TOP_VIA_MMC
+	CONNECT TOP_M_C   SEC_LAST_MET_C	BY  TOP_VIA_SLM
+	CONNECT SEC_LAST_MET_C	ME2_NORES  	BY  VI2
+    #ELSE	
+#IFDEF TOP_METAL_ME5
+		CONNECT NULL1	ME6_NORES //Meaningless, to avoid compilation error 
+
+		CONNECT TOP_M_C	  MMC_C   BY TOP_VIA_MMC
+		CONNECT TOP_M_C   MMC_I   BY TOP_VIA_MMC
+		CONNECT TOP_M_C   SEC_LAST_MET_C	BY  TOP_VIA_SLM
+		CONNECT SEC_LAST_MET_C  ME3_NORES  	BY  VI3
+		CONNECT ME3_NORES   	ME2_NORES  	BY  VI2
+	#ELSE
+		CONNECT TOP_M_C	  MMC_C   BY TOP_VIA_MMC
+		CONNECT TOP_M_C   MMC_I   BY TOP_VIA_MMC
+		CONNECT TOP_M_C   SEC_LAST_MET_C	BY  TOP_VIA_SLM
+		CONNECT SEC_LAST_MET_C  ME4_NORES  	BY  VI4
+		CONNECT ME4_NORES   	ME3_NORES  	BY  VI3
+		CONNECT ME3_NORES   	ME2_NORES  	BY  VI2
+	#ENDIF
+#ENDIF
+
+CONNECT ME2_NORES   ME1_NORES  BY  VI1
+CONNECT ME1_NORES   PLY_C PSD_C  NSD_C  BY CONT
+CONNECT ME1_NORES   PLY_I PSD_I  NSD_I  BY CONT
+
+CONNECT NSD_C PTAP 		// Soft Connection
+CONNECT NSD_I PTAP              // Soft Connection
+CONNECT PSD_C NTAP 		// Soft Connection
+CONNECT PSD_I NTAP              // Soft Connection
+
+SCONNECT NSD_C WEL     BY  NTAP
+SCONNECT NSD_I WEL     BY  NTAP
+SCONNECT PSD_C PSUB    BY  PTAP
+SCONNECT PSD_I PSUB    BY  PTAP
+SCONNECT PSD_C TWEL    BY  TNTAP
+SCONNECT PSD_I TWEL    BY  TNTAP
+
+//////////////////////////
+// ERC
+//////////////////////////
+LVS SOFTCHK PSUB   LOWER
+LVS SOFTCHK WEL    LOWER
+
+ERC MAXIMUM RESULTS 100
+ERC RESULTS DATABASE  "calibre_erc.db" ASCII
+//ERC PATHCHK GROUND && !POWER
+//ERC PATHCHK POWER && !GROUND
+//ERC PATHCHK !POWER && !GROUND
+//ERC PATHCHK !LABELED
+
+//////////////////////////
+// Transistor Devices
+//////////////////////////
+
+//////////////////////////////////////////////////////////////////
+//  To check the device dimension of VST 0.18um logic libraries, 
+//  please uncomment //#DEFINE VST_LIB, 
+//  and comment #DEFINE ARTISAN_LIB/Mixed_Mode_Device.
+//////////////////////////////////////////////////////////////////
+
+//#DEFINE VST_LIB
+#DEFINE ARTISAN_LIB/Mixed_Mode_Device
+
+// 1.8V NMOS_LOGIC //
+DEVICE MN(N_18) NG_SP PLY_C(G) NSD_C(S) NSD_C(D) PSUB(B) <DIFF>
+
+#IFDEF ARTISAN_LIB/Mixed_Mode_Device
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NG_SP) - PERIMETER_COINCIDE(NG_SP,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NG_SP,NSD_C) / 2
+   IF (BENDS(NG_SP) > 0)  W = W - (BENDS(NG_SP) * bend_effect * L)
+
+  // Algorithm to compute L of donut device correctly in RAM 
+
+   IF (BENDS(NG_SP) >= 4) {
+	L = area(NG_SP) / W
+	L = trunc((L * 1e+08) + 0.5) / 1e+08        // rounding to 0.01u
+   }
+        W = trunc((W *1e+08) + 0.5) / 1e+08         // rounding to 0.01u
+   
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NG_SP,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NG_SP,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+#ENDIF
+
+TRACE PROPERTY MN(N_18) L L 5
+TRACE PROPERTY MN(N_18) W W 5
+//TRACE PROPERTY MN(N_18) AD AD 1
+//TRACE PROPERTY MN(N_18) AS AS 1
+//TRACE PROPERTY MN(N_18) PD PD 1
+//TRACE PROPERTY MN(N_18) PS PS 1
+
+// 1.8V PMOS_LOGIC //
+DEVICE MP(P_18) PG_SP PLY_C(G) PSD_C(S) PSD_C(D) WEL(B)  <DIFF>
+
+#IFDEF ARTISAN_LIB/Mixed_Mode_Device
+[   PROPERTY W,L,AD,AS,PD,PS
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+ 
+   L = (PERIMETER(PG_SP) - PERIMETER_COINCIDE(PG_SP,PSD_C)) / 2
+   W = PERIMETER_COINCIDE(PG_SP,PSD_C) / 2
+   W = trunc((W *1e+08) + 0.5) / 1e+08         // rounding to 0.01u 
+   IF (BENDS(PG_SP) > 0)  W = W - (BENDS(PG_SP) * bend_effect * L)
+ 
+  // Algorithm to compute L of donut devices correctly in RAM 
+
+   IF (BENDS(PG_SP) >= 4) {
+	L = area(PG_SP) / W
+	L = trunc((L * 1e+08) + 0.5) / 1e+08    // rounding to 0.01u
+   }
+        W = trunc((W *1e+08) + 0.5) / 1e+08     // rounding to 0.01u 
+
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(PG_SP,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(PG_SP,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+#ENDIF
+
+TRACE PROPERTY MP(P_18) L L 5
+TRACE PROPERTY MP(P_18) W W 5
+//TRACE PROPERTY MP(P_18) AD AD 1
+//TRACE PROPERTY MP(P_18) AS AS 1
+//TRACE PROPERTY MP(P_18) PD PD 1
+//TRACE PROPERTY MP(P_18) PS PS 1
+
+// 3.3V NMOS_LOGIC //
+DEVICE MN(N_33) NG_TGSP PLY_C(G) NSD_C(S) NSD_C(D) PSUB(B)  <DIFF>
+
+#IFDEF ARTISAN_LIB/Mixed_Mode_Device
+[  PROPERTY W,L,AD,AS,PD,PS
+
+   bend_effect = 0.0
+
+   // Measures the gate length and width.
+   L = (PERIMETER(NG_TGSP) - PERIMETER_COINCIDE(NG_TGSP,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NG_TGSP,NSD_C) / 2
+   IF (BENDS(NG_TGSP) > 0) W = W - (BENDS(NG_TGSP) * bend_effect * L)
+   W = trunc((W *1e+08) + 0.5) / 1e+08         // rounding to 0.01u
+
+  // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NG_TGSP,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NG_TGSP,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+#ENDIF
+
+TRACE PROPERTY MN(N_33) L L 5
+TRACE PROPERTY MN(N_33) W W 5
+//TRACE PROPERTY MN(N_33) AD AD 1
+//TRACE PROPERTY MN(N_33) AS AS 1
+//TRACE PROPERTY MN(N_33) PD PD 1
+//TRACE PROPERTY MN(N_33) PS PS 1
+
+// 3.3V PMOS_LOGIC //
+DEVICE MP(P_33) PG_TGSP PLY_C(G) PSD_C(S) PSD_C(D) WEL(B)  <DIFF>
+
+#IFDEF ARTISAN_LIB/Mixed_Mode_Device
+[  PROPERTY W,L,AD,AS,PD,PS
+
+   bend_effect = 0.0
+
+   // Measures the gate length and width.
+
+   L = (PERIMETER(PG_TGSP) - PERIMETER_COINCIDE(PG_TGSP,PSD_C)) / 2
+   W = PERIMETER_COINCIDE(PG_TGSP,PSD_C) / 2
+   IF (BENDS(PG_TGSP) > 0) W = W - (BENDS(PG_TGSP) * bend_effect * L)
+    W = trunc((W *1e+08) + 0.5) / 1e+08         // rounding to 0.01u
+
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(PG_TGSP,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(PG_TGSP,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+#ENDIF
+
+TRACE PROPERTY MP(P_33) L L 5
+TRACE PROPERTY MP(P_33) W W 5
+//TRACE PROPERTY MP(P_33) AD AD 1
+//TRACE PROPERTY MP(P_33) AS AS 1
+//TRACE PROPERTY MP(P_33) PD PD 1
+//TRACE PROPERTY MP(P_33) PS PS 1
+
+// VST Memory NMOS Cell //
+//DEVICE MN(NB) VST_NBIT PLY_C NSD_C NSD_C PSUB 
+//TRACE PROPERTY MN(NB) L L 15
+//TRACE PROPERTY MN(NB) W W 15
+
+// VST Memory PMOS Cell //
+//DEVICE MP(PB) VST_PBIT PLY_C PSD_C PSD_C WEL
+//TRACE PROPERTY MP(PB) L L 15
+//TRACE PROPERTY MP(PB) W W 15
+
+
+// 1.8V Low VT NMOS //
+DEVICE MN(N_LV_18) NLGATE PLY_C(G) NSD_C(S)  NSD_C(D) PSUB(B) <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NLGATE) - PERIMETER_COINCIDE(NLGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NLGATE,NSD_C) / 2
+   IF (BENDS(NLGATE) > 0) W = W - (BENDS(NLGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NLGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NLGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_LV_18) L L 1
+TRACE PROPERTY MN(N_LV_18) W W 1
+//TRACE PROPERTY MN(N_LV_18) AD AD 1
+//TRACE PROPERTY MN(N_LV_18) AS AS 1
+//TRACE PROPERTY MN(N_LV_18) PD PD 1
+//TRACE PROPERTY MN(N_LV_18) PS PS 1
+
+// 1.8V Low VT PMOS //
+DEVICE MP(P_LV_18) PLGATE PLY_C(G) PSD_C(S)  PSD_C(D) WEL(B)  <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(PLGATE) - PERIMETER_COINCIDE(PLGATE,PSD_C)) / 2
+   W = PERIMETER_COINCIDE(PLGATE,PSD_C) / 2
+   IF (BENDS(PLGATE) > 0) W = W - (BENDS(PLGATE) * bend_effect * L)
+   
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(PLGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(PLGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MP(P_LV_18) L L 1
+TRACE PROPERTY MP(P_LV_18) W W 1
+//TRACE PROPERTY MP(P_LV_18) AD AD 1
+//TRACE PROPERTY MP(P_LV_18) AS AS 1
+//TRACE PROPERTY MP(P_LV_18) PD PD 1
+//TRACE PROPERTY MP(P_LV_18) PS PS 1
+
+// 3.3V Low VT NMOS_MM //
+DEVICE MN(N_LV_33) NHGATE PLY_C(G) NSD_C(S)  NSD_C(D) PSUB(B) <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NHGATE) - PERIMETER_COINCIDE(NHGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NHGATE,NSD_C) / 2
+   IF (BENDS(NHGATE) > 0) W = W - (BENDS(NHGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NHGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NHGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_LV_33) L L 1
+TRACE PROPERTY MN(N_LV_33) W W 1
+//TRACE PROPERTY MN(N_LV_33) AD AD 1
+//TRACE PROPERTY MN(N_LV_33) AS AS 1
+//TRACE PROPERTY MN(N_LV_33) PD PD 1
+//TRACE PROPERTY MN(N_LV_33) PS PS 1
+
+// 3.3V Low VT PMOS_MM //
+DEVICE MP(P_LV_33) PHLGATE PLY_C(G) PSD_C(S)  PSD_C(D) WEL(B) <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(PHLGATE) - PERIMETER_COINCIDE(PHLGATE,PSD_C)) / 2
+   W = PERIMETER_COINCIDE(PHLGATE,PSD_C) / 2
+   IF (BENDS(PHLGATE) > 0) W = W - (BENDS(PHLGATE) * bend_effect * L)
+   
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(PHLGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(PHLGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MP(P_LV_33) L L 1
+TRACE PROPERTY MP(P_LV_33) W W 1
+//TRACE PROPERTY MP(P_LV_33) AD AD 1
+//TRACE PROPERTY MP(P_LV_33) AS AS 1
+//TRACE PROPERTY MP(P_LV_33) PD PD 1
+//TRACE PROPERTY MP(P_LV_33) PS PS 1
+
+// 1.8V Zero VT NMOS_MM //
+DEVICE MN(N_ZERO_18) NIGATE PLY_C(G) NSD_C(S)  NSD_C(D) PSUB(B)  <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NIGATE) - PERIMETER_COINCIDE(NIGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NIGATE,NSD_C) / 2
+   IF (BENDS(NIGATE) > 0) W = W - (BENDS(NIGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NIGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NIGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_ZERO_18) L L 1
+TRACE PROPERTY MN(N_ZERO_18) W W 1
+//TRACE PROPERTY MN(N_ZERO_18) AD AD 1
+//TRACE PROPERTY MN(N_ZERO_18) AS AS 1
+//TRACE PROPERTY MN(N_ZERO_18) PD PD 1
+//TRACE PROPERTY MN(N_ZERO_18) PS PS 1
+
+// 3.3V Zero VT NMOS_MM //
+DEVICE MN(N_ZERO_33) NJGATE PLY_C(G) NSD_C(S)  NSD_C(D) PSUB(B) <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NJGATE) - PERIMETER_COINCIDE(NJGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NJGATE,NSD_C) / 2
+   IF (BENDS(NJGATE) > 0) W = W - (BENDS(NJGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NJGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NJGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_ZERO_33) L L 1
+TRACE PROPERTY MN(N_ZERO_33) W W 1
+//TRACE PROPERTY MN(N_ZERO_33) AD AD 1
+//TRACE PROPERTY MN(N_ZERO_33) AS AS 1
+//TRACE PROPERTY MN(N_ZERO_33) PD PD 1
+//TRACE PROPERTY MN(N_ZERO_33) PS PS 1
+
+// 1.8V Triple well NMOS //
+DEVICE MN(N_BPW_18) NSGATE PLY_C(G) NSD_C(S) NSD_C(D) TWEL(B)  <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(NSGATE) - PERIMETER_COINCIDE(NSGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(NSGATE,NSD_C) / 2
+   IF (BENDS(NSGATE) > 0) W = W - (BENDS(NSGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(NSGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(NSGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_BPW_18) L L 1
+TRACE PROPERTY MN(N_BPW_18) W W 1
+//TRACE PROPERTY MN(N_BPW_18) AD AD 1
+//TRACE PROPERTY MN(N_BPW_18) AS AS 1
+//TRACE PROPERTY MN(N_BPW_18) PD PD 1
+//TRACE PROPERTY MN(N_BPW_18) PS PS 1
+
+// 3.3V Triple well NMOS //
+DEVICE MN(N_BPW_33) TGNSGATE PLY_C(G) NSD_C(S)  NSD_C(D) TWEL(B)  <DIFF>
+[  PROPERTY W,L,AD,AS,PD,PS  
+ 
+   bend_effect = 0.0
+ 
+   // Measures the gate length and width.
+   L = (PERIMETER(TGNSGATE) - PERIMETER_COINCIDE(TGNSGATE,NSD_C)) / 2
+   W = PERIMETER_COINCIDE(TGNSGATE,NSD_C) / 2
+   IF (BENDS(TGNSGATE) > 0) W = W - (BENDS(TGNSGATE) * bend_effect * L)
+ 
+   // Calculate the SRC/DRN Perimeter/Area
+   WS = PERIMETER_COINCIDE(TGNSGATE,S)
+   AS = area(S)*( WS/PERIMETER_INSIDE(S, DIFF))
+   PS = perimeter(S)*(WS/PERIMETER_INSIDE(S, DIFF))-WS
+   AD = 0						// For MOSCAP case
+   PD = 0
+ IF (area(D) > 0) { 
+   WD = PERIMETER_COINCIDE(TGNSGATE,D)
+   AD = area(D)*(WD/PERIMETER_INSIDE(D, DIFF))
+   PD = perimeter(D)*(WD/PERIMETER_INSIDE(D, DIFF))-WD
+ }
+]
+TRACE PROPERTY MN(N_BPW_33) L L 1
+TRACE PROPERTY MN(N_BPW_33) W W 1
+//TRACE PROPERTY MN(N_BPW_33) AD AD 1
+//TRACE PROPERTY MN(N_BPW_33) AS AS 1
+//TRACE PROPERTY MN(N_BPW_33) PD PD 1
+//TRACE PROPERTY MN(N_BPW_33) PS PS 1
+
+
+//////////////////////////
+// Resistor Devices
+//////////////////////////
+
+// Logic N-well resistor
+DEVICE R(RSNWELL) WELRES WEL WEL 
+[	property w,l,R
+	rs_nw = 415
+	w = PERIMETER_COINCIDE(WELRES, WEL) / 2
+	l = (PERIMETER(WELRES) - PERIMETER_COINCIDE(WELRES, WEL)) / 2
+	R = (l/w) * rs_nw
+ 
+// For width effect
+//	R = (L/W)*(408*W/(W-0.32e-6))
+ ]
+TRACE PROPERTY R(RSNWELL) R R 10
+//TRACE PROPERTY R(RSNWELL) l l 1
+//TRACE PROPERTY R(RSNWELL) w w 1
+
+// Logic Salicide N+ resistor
+DEVICE R(RSND) SNSRES NSD_C:1 NSD_C:1 [8]
+TRACE PROPERTY R(RSND) R R 10
+
+// Logic Salicide P+ resistor
+DEVICE R(RSPD) SPSRES PSD_C:1 PSD_C:1  [8]
+TRACE PROPERTY R(RSPD) R R 10
+
+// Logic Salicide N+ Poly resistor
+DEVICE R(RSNPO) SNPYR PLY_C PLY_C [8]
+TRACE PROPERTY R(RSNPO) R R 10 
+
+// Logic Salicide P+ Poly resistor
+DEVICE R(RSPPO) SPPYR PLY_C PLY_C	[8]
+TRACE PROPERTY R(RSPPO) R R 10
+
+// Logic Non-Salicide N+ resistor
+DEVICE R(RNND) NSNSRES NSD_C NSD_C
+[	property w,l,R
+	rs_ndiffsab = 80
+	w = PERIMETER_COINCIDE(NSNSRES, NSD_C) / 2
+	l = (PERIMETER(NSNSRES) - PERIMETER_COINCIDE(NSNSRES, NSD_C)) / 2
+	R = (l/w) * rs_ndiffsab
+
+// For width effect
+//	R = (L/W)*(80*W/(W+0.0675e-6))
+ ]
+TRACE PROPERTY R(RNND) R R 10
+//TRACE PROPERTY R(RNND) l l 1
+//TRACE PROPERTY R(RNND) w w 1
+
+// Logic Non-Salicide P+ resistor
+DEVICE R(RNPD) NSPSRES PSD_C PSD_C 
+[	property w,l,R
+	rs_pdiffsab = 158
+	w = PERIMETER_COINCIDE(NSPSRES, PSD_C) / 2
+	l = (PERIMETER(NSPSRES) - PERIMETER_COINCIDE(NSPSRES, PSD_C)) / 2
+	R = (l/w) * rs_pdiffsab
+
+// For width effect
+//	R = (L/W)*(158.66*W/(W+0.087e-6))
+ ]
+TRACE PROPERTY R(RNPD) R R 10
+//TRACE PROPERTY R(RNPD) l l 1
+//TRACE PROPERTY R(RNPD) w w 1
+
+// Logic Non-Salicide N+ Poly resistor
+DEVICE R(RNNPO) NSNPYR PLY_C PLY_C
+[	property w,l,R
+	rs_nposab = 113
+	w = PERIMETER_COINCIDE(NSNPYR, PLY_C) / 2
+	l = (PERIMETER(NSNPYR) - PERIMETER_COINCIDE(NSNPYR, PLY_C)) / 2
+	R = (l/w) * rs_nposab
+
+// For the temperature & Voltage dependent resistance equation,
+        Rend   = 17e-6
+        Rs     = 113
+        deltaW =  -0.097e-6
+//	R = (2*Rend/(W+deltaW)+Rs*L/(W+deltaW)) 
+ ]
+TRACE PROPERTY R(RNNPO) R R 10
+//TRACE PROPERTY R(RNNPO) l l 1
+//TRACE PROPERTY R(RNNPO) w w 1
+
+// Logic Non-Salicide P+ Poly resistor
+DEVICE R(RNPPO) NSPPYR PLY_C PLY_C 
+[	property w,l,R
+	rs_pposab = 352
+	w = PERIMETER_COINCIDE(NSPPYR, PLY_C) / 2
+	l = (PERIMETER(NSPPYR) - PERIMETER_COINCIDE(NSPPYR, PLY_C)) / 2
+	R = (l/w) * rs_pposab
+
+// For the temperature & Voltage dependent resistance equation,
+        Rend   = 105e-6
+        Rs     = 352
+        deltaW =  -0.046e-6
+//	R = (2*Rend/(W+deltaW)+Rs*L/(W+deltaW)) 
+]
+TRACE PROPERTY R(RNPPO) R R 10
+//TRACE PROPERTY R(RNPPO) l l 1
+//TRACE PROPERTY R(RNPPO) w w 1
+
+// Mixed Mode HR resistor
+DEVICE R(RNHR1000) NSHRPYR PLY_C PLY_C     WEL(SUB)    NETLIST ELEMENT "X"
+#IFDEF PEXRUN
+[	property wr,lr
+	wr = PERIMETER_COINCIDE(NSHRPYR, PLY_C) / 2	
+	lr = (PERIMETER(NSHRPYR) - PERIMETER_COINCIDE(NSHRPYR, PLY_C)) / 2
+ ]
+#ELSE
+[	property w,l,R
+	rs_hr = 1039
+	w  = PERIMETER_COINCIDE(NSHRPYR, PLY_C) / 2	
+	l  = (PERIMETER(NSHRPYR) - PERIMETER_COINCIDE(NSHRPYR, PLY_C)) / 2	
+//	R = (l/w) * rs_hr
+
+// For the temperature & Voltage dependent resistance equation,
+        Rend   = 120e-6
+        Rs     = 1039
+        deltaW =  -0.043e-6
+	LX     = L - 0.4e-6
+	R = (2*Rend/(W+deltaW)+Rs*LX/(W+deltaW)) 
+ ]
+TRACE PROPERTY R(RNHR1000) R R 10
+//TRACE PROPERTY R(RNHR1000) l l 1
+//TRACE PROPERTY R(RNHR1000) w w 1
+#ENDIF
+
+
+// ------ Metal Resistor Devices------
+#IFDEF PEXRUN
+DEVICE RM1  ME1RES  ME1_C(A)  ME1_C(B)  <ME1> <MRSYMBOL>    NETLIST ELEMENT "X"
+[	property wr,lr	
+	wr = (PERIMETER(ME1RES) - PERIMETER_COINCIDE(ME1, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME1, MRSYMBOL) / 2
+ ]
+#ELSE
+DEVICE R(RM1)  ME1RES  ME1_C  ME1_C  <ME1> <MRSYMBOL>
+[	property w,l,R
+	rs_m1 = 0.077	
+	w = (PERIMETER(ME1RES) - PERIMETER_COINCIDE(ME1, MRSYMBOL)) / 2
+	l = PERIMETER_COINCIDE(ME1, MRSYMBOL) / 2
+	R = (l/w) * rs_m1
+ ]
+TRACE PROPERTY R(RM1) R R 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE RM2  ME2RES  ME2_C(A)  ME2_C(B)  <ME2> <MRSYMBOL>    NETLIST ELEMENT "X"
+[	property wr,lr	
+	wr = (PERIMETER(ME2RES) - PERIMETER_COINCIDE(ME2, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME2, MRSYMBOL) / 2
+ ]
+#ELSE
+DEVICE R(RM2)  ME2RES  ME2_C  ME2_C <ME2> <MRSYMBOL>
+[	property w,l,R
+	rs_m2 = 0.062	
+	w = (PERIMETER(ME2RES) - PERIMETER_COINCIDE(ME2, MRSYMBOL)) / 2
+	l = PERIMETER_COINCIDE(ME2, MRSYMBOL) / 2
+	R = (l/w) * rs_m2
+ ]
+TRACE PROPERTY R(RM2) R R 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE RM3  ME3RES  ME3_C(A)  ME3_C(B)  <ME3> <MRSYMBOL>    NETLIST ELEMENT "X"
+[	property wr,lr
+	wr = (PERIMETER(ME3RES) - PERIMETER_COINCIDE(ME3, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME3, MRSYMBOL) / 2
+ ]
+#ELSE
+DEVICE R(RM3)  ME3RES  ME3_C  ME3_C <ME3> <MRSYMBOL>
+[	property w,l,R
+	rs_m3 = 0.062	
+	w = (PERIMETER(ME3RES) - PERIMETER_COINCIDE(ME3, MRSYMBOL)) / 2
+	l = PERIMETER_COINCIDE(ME3, MRSYMBOL) / 2
+	R = (l/w) * rs_m3
+ ]
+TRACE PROPERTY R(RM3) R R 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE RM4  ME4RES  ME4_C(A)  ME4_C(B)  <ME4> <MRSYMBOL>    NETLIST ELEMENT "X"
+ [	property wr,lr	
+	wr = (PERIMETER(ME4RES) - PERIMETER_COINCIDE(ME4, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME4, MRSYMBOL) / 2
+]
+#ELSE
+    #IFDEF TOP_METAL_ME4
+	#IFDEF TOP_METAL_THICKNESS_20K
+    	    	DEVICE R(RM4)  ME4RES  ME4_C  ME4_C <ME4> <MRSYMBOL>
+    	    	[
+		property w,l,R
+		rs_m4 = 0.020	
+		w = (PERIMETER(ME4RES) - PERIMETER_COINCIDE(ME4, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME4, MRSYMBOL) / 2
+		R = (l/w) * rs_m4
+    	    	]
+    	#ELSE
+    		DEVICE R(RM4)  ME4RES  ME4_C  ME4_C <ME4> <MRSYMBOL>
+    		[
+		property w,l,R
+		rs_m4 = 0.041	
+		w = (PERIMETER(ME4RES) - PERIMETER_COINCIDE(ME4, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME4, MRSYMBOL) / 2
+		R = (l/w) * rs_m4
+    		]
+	#ENDIF
+    #ELSE
+    	DEVICE R(RM4)  ME4RES  ME4_C  ME4_C <ME4> <MRSYMBOL>
+    	[
+	property w,l,R
+	rs_m4 = 0.062	
+	w = (PERIMETER(ME4RES) - PERIMETER_COINCIDE(ME4, MRSYMBOL)) / 2
+	l = PERIMETER_COINCIDE(ME4, MRSYMBOL) / 2
+	R = (l/w) * rs_m4
+    	]
+    #ENDIF
+TRACE PROPERTY R(RM4) R R 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE RM5  ME5RES  ME5_C(A)  ME5_C(B)  <ME5> <MRSYMBOL>    NETLIST ELEMENT "X"
+[	property wr,lr	
+	wr = (PERIMETER(ME5RES) - PERIMETER_COINCIDE(ME5, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME5, MRSYMBOL) / 2
+ ]
+#ELSE
+    #IFDEF TOP_METAL_ME5
+	#IFDEF TOP_METAL_THICKNESS_20K
+    		DEVICE R(RM5)  ME5RES  ME5_C  ME5_C  <ME5> <MRSYMBOL>
+		[
+		property w,l,R
+		rs_m5 = 0.020	
+		w = (PERIMETER(ME5RES) - PERIMETER_COINCIDE(ME5, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME5, MRSYMBOL) / 2
+		R = (l/w) * rs_m5
+ 		]
+	#ELSE
+    		DEVICE R(RM5)  ME5RES  ME5_C  ME5_C  <ME5> <MRSYMBOL>
+		[
+		property w,l,R
+		rs_m5 = 0.041	
+		w = (PERIMETER(ME5RES) - PERIMETER_COINCIDE(ME5, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME5, MRSYMBOL) / 2
+		R = (l/w) * rs_m5
+ 		]
+    	#ENDIF
+    #ELSE
+	DEVICE R(RM5)  ME5RES  ME5_C  ME5_C  <ME5> <MRSYMBOL>
+	[
+	property w,l,R
+	rs_m5 = 0.062	
+	w = (PERIMETER(ME5RES) - PERIMETER_COINCIDE(ME5, MRSYMBOL)) / 2
+	l = PERIMETER_COINCIDE(ME5, MRSYMBOL) / 2
+	R = (l/w) * rs_m5
+ 	]
+    #ENDIF
+TRACE PROPERTY R(RM5) R R 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE RM6  ME6RES  ME6_C(A)   ME6_C(B)  <ME6> <MRSYMBOL>    NETLIST ELEMENT "X" 
+[	property wr,lr
+	wr = (PERIMETER(ME6RES) - PERIMETER_COINCIDE(ME6, MRSYMBOL)) / 2
+	lr = PERIMETER_COINCIDE(ME6, MRSYMBOL) / 2
+ ]
+#ELSE
+	#IFDEF TOP_METAL_THICKNESS_20K
+		DEVICE R(RM6)  ME6RES  ME6_C   ME6_C  <ME6> <MRSYMBOL>
+		[
+		property w,l,R
+		rs_m6 = 0.020	
+		w = (PERIMETER(ME6RES) - PERIMETER_COINCIDE(ME6, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME6, MRSYMBOL) / 2
+		R = (l/w) * rs_m6
+ 		]
+	#ELSE
+		DEVICE R(RM6)  ME6RES  ME6_C   ME6_C  <ME6> <MRSYMBOL>
+		[
+		property w,l,R
+		rs_m6 = 0.041	
+		w = (PERIMETER(ME6RES) - PERIMETER_COINCIDE(ME6, MRSYMBOL)) / 2
+		l = PERIMETER_COINCIDE(ME6, MRSYMBOL) / 2
+		R = (l/w) * rs_m6
+ 		]
+	#ENDIF
+TRACE PROPERTY R(RM6) R R 1
+#ENDIF
+
+
+///////////////////////////////
+// BJT Transistor
+///////////////////////////////
+
+DEVICE Q(PNP_V50X50)      ACTBJT5      QTC  QTB  QTE
+#IFDEF PEXRUN
+#ELSE
+[ 
+  PROPERTY A
+  A=AREA(QTE) 
+]
+TRACE PROPERTY Q(PNP_V50X50) A  A  1
+#ENDIF
+
+
+DEVICE Q(PNP_V100X100)    ACTBJT10     QTC  QTB  QTE
+#IFDEF PEXRUN
+#ELSE
+[ 
+  PROPERTY A
+  A=AREA(QTE) 
+]
+TRACE PROPERTY Q(PNP_V100X100) A  A  1
+#ENDIF
+
+
+
+///////////////////////////////
+// MIM Capacitor
+///////////////////////////////
+
+DEVICE C(MIMCAPS)  CMMC   MMC_C  SEC_LAST_MET_C  <CW1> <CL1> NETLIST ELEMENT "X"
+#IFDEF PEXRUN
+[   PROPERTY W, L
+    W = PERIMETER_INSIDE(CMMC,CW1) 
+    L = PERIMETER_INSIDE(CMMC,CL1) 
+]
+#ELSE
+[   PROPERTY C, W, L
+    Ca = 1e-3         // F/M^2
+    Cf = 7.5e-11      // F/M
+    C = Ca * area(CMMC) + Cf * perimeter_inside(CMMC, SEC_LAST_MET_C) 
+    W = PERIMETER_INSIDE(CMMC,CW1) 
+    L = PERIMETER_INSIDE(CMMC,CL1) 
+]
+TRACE PROPERTY C(MIMCAPS) C C 1
+#ENDIF
+
+
+///////////////////////////////
+// Diode Devices
+///////////////////////////////
+
+#IFDEF PEXRUN
+DEVICE DN DN_SP PSUB(A) NSD_C(B) 
+[   PROPERTY A,PJ,W,L
+    A    = area(DN_SP)
+    PJ   = perimeter(DN_SP)
+    W    = (PJ/2 - SQRT( PJ*PJ/4 - 4*A )) / 2
+    L    = A / W
+]
+#ELSE
+DEVICE D(DN) DN_SP PSUB NSD_C 
+TRACE PROPERTY D(DN) A A 12
+TRACE PROPERTY D(DN) P P 1
+#ENDIF
+
+
+#IFDEF PEXRUN
+DEVICE DP DP_SP PSD_C(A) WEL(B) 
+[   PROPERTY A,PJ,W,L
+    A    = area(DP_SP)
+    PJ   = perimeter(DP_SP) 
+    W    = (PJ/2 - SQRT( PJ*PJ/4 - 4*A )) / 2
+    L    = A / W
+]
+#ELSE
+DEVICE D(DP) DP_SP PSD_C WEL 
+TRACE PROPERTY D(DP) A A 12
+TRACE PROPERTY D(DP) P P 1
+#ENDIF
+
+
+///////////////////////////////
+// Circular spiral inductor
+///////////////////////////////
+#IFDEF PEXRUN
+//DEVICE L_SLCR20K_RF   TOP_M_L TOP_M_C(POS) SEC_LAST_MET_C(NEG) IND_SUB(SUB) <LDIMETER> <SLM_L1> <SLM_L2> <TOP_M_LB> <TOP_M_LS> NETLIST ELEMENT "X"
+DEVICE L_SLCR20K_RF   IND_CR IND_PLUS(POS) IND_MINUS(NEG) IND_SUB(SUB) <LDIMETER> <SLM_L1> <SLM_L2> <TOP_M_LB> <TOP_M_LS> NETLIST ELEMENT "X"
+[ property W,N,D,S
+ N  = COUNT(SLM_L2) + 0.5
+ W  = PERIMETER_INSIDE(SLM_L2,TOP_M_LS)/(2*COUNT(SLM_L2))+0.2E-6
+ P  = PERIMETER(LDIMETER) / 2
+ A  = AREA(LDIMETER) 
+ OD = (P - SQRT( P*P -  4*A )) / 2
+ S  = PERIMETER_OUTSIDE(SLM_L1,TOP_M_LB)/(2*COUNT(SLM_L1))+0.2E-6
+ D  = OD-2*(N-1)*S - 2*N*W - 0.5*(W + S)
+]
+#ELSE
+//DEVICE L(L_SLCR20K_RF) TOP_M_L TOP_M_C(POS) SEC_LAST_MET_C(NEG) <LDIMETER> <SLM_L1> <SLM_L2> <TOP_M_LB> <TOP_M_LS>
+DEVICE L(L_SLCR20K_RF) IND_CR IND_PLUS(POS) IND_MINUS(NEG) IND_SUB(SUB) <LDIMETER> <SLM_L1> <SLM_L2> <TOP_M_LB> <TOP_M_LS>
+[
+ property W, N, D, S, L
+
+ N  = COUNT(SLM_L2) + 0.5
+ W  = PERIMETER_INSIDE(SLM_L2,TOP_M_LS)/(2*COUNT(SLM_L2))+0.2E-6
+ P  = PERIMETER(LDIMETER) / 2
+ A  = AREA(LDIMETER) 
+ OD = (P - SQRT( P*P -  4*A )) / 2
+ S  = PERIMETER_OUTSIDE(SLM_L1,TOP_M_LB)/(2*COUNT(SLM_L1))+0.2E-6
+ D  = OD - 2*(N-1)*S - 2*N*W - 0.5*(W + S)
+ du = ( D/2 ) * 1e6
+ wu = W *1e6
+ su = S *1e6
+ tu = 2
+ L_spiral = 0.5*(N*3.14159*(2*(2*du+wu)+(2*N-1) * (wu+su))) + (N+0.5) * (wu+su) 
+ d_plus= (wu+su)*(3*N-2*(N-0.5)-1)*(N+0.5)/(3*(2*N-N-0.5)) 
+ 
+ L= (2*L_spiral*(log(2*L_spiral/(wu+tu))-0.2-0.4418*N+0.97*(N-1)* (log(sqrt(1 +(L_spiral/(4*N*d_plus))*(L_spiral/(4*N*d_plus)))+L_spiral/(4*N*d_plus))-sqrt(1+(4*N*d_plus/L_spiral)*(4*N*d_plus/L_spiral))+4*N*d_plus/L_spiral))+2923-3700*N+507*N*N)*1e-13 
+]
+//TRACE PROPERTY L(L_SLCR20K_RF) W W  1
+//TRACE PROPERTY L(L_SLCR20K_RF) N N  0
+//TRACE PROPERTY L(L_SLCR20K_RF) L L  1
+//TRACE PROPERTY L(L_SLCR20K_RF) D D  1
+//TRACE PROPERTY L(L_SLCR20K_RF) S S  1
+#ENDIF
+
+/* DEVICE L(L_SLSQ20K) IND_SQR  IND_PLUS(POS)  IND_MINUS(NEG) <LDIMETER> <SLM_L1> <SLM_L2> <TOP_M_LB> <TOP_M_LS>
+    [   property N,W,D,S // ,L
+        N  = COUNT(SLM_L2) + 0.5
+ 	W  = PERIMETER_INSIDE(SLM_L2,TOP_M_LS)/(2*COUNT(SLM_L2))+0.2E-6
+ 	P  = PERIMETER(LDIMETER) / 2
+ 	A  = AREA(LDIMETER)
+ 	OD = (P - SQRT( P*P -  4*A )) / 2
+ 	S  = PERIMETER_OUTSIDE(SLM_L1,TOP_M_LB)/(2*COUNT(SLM_L1))+0.2E-6
+ 	D  = OD - 2*(N-1)*S - 2*N*W - 0.5*(W + S)
+    ]
+//TRACE PROPERTY L(L_SLSQ20K) W W  1
+//TRACE PROPERTY L(L_SLSQ20K) N N  0
+//TRACE PROPERTY L(L_SLSQ20K) D D  1
+//TRACE PROPERTY L(L_SLSQ20K) S S  1
+
+DEVICE L(L_SYCR20K) IND_SYM  TOP_M_C(POS)  TOP_M_C(NEG) (POS NEG) <SLM_L2> <IND_D2>
+    [   property N, D 
+        N  = COUNT(SLM_L2) + 1
+        P  = PERIMETER(IND_D2) /2
+        A  = AREA(IND_D2) 
+        D  = (P - SQRT( P*P - 4*A )) /2  
+    ]
+//TRACE PROPERTY L(L_SYCR20K) N N  0
+//TRACE PROPERTY L(L_SYCR20K) D D  1
+
+*/    
+
+#IFDEF PEXRUN
+  DEVICE PAD_RF	RF_PAD	TOP_M_C(POS)	ME1_NORES(NEG)	<INDEXA> NETLIST ELEMENT "X"
+  [ PROPERTY INDEX
+	INDEX = COUNT(INDEXA)
+  ]
+#ELSE
+  DEVICE C(PAD_RF) RF_PAD	TOP_M_C(POS)	ME1_NORES(NEG)	[1e-10]
+#ENDIF
+
+
+
+///////////////////////////////////////////////////////////
+//// Define Metal,POLY,DIFF,MMCTP,MMCBP interconnect layer/
+///////////////////////////////////////////////////////////
+PLY_C   = PLY NOT RFSYMBOL
+PLY_I   = RFSYMBOL AND PLY
+PSD_C   = PSD NOT RFSYMBOL
+PSD_I   = RFSYMBOL AND PSD
+NSD_C   = NSD NOT RFSYMBOL
+NSD_I   = RFSYMBOL AND NSD
+MMC_C = MMC NOT RFSYMBOL
+MMC_I = RFSYMBOL AND MMC
+CONNECT PLY_C PLY_I
+CONNECT NSD_C NSD_I
+CONNECT PSD_C PSD_I
+CONNECT MMC_C MMC_I
+  

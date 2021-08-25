@@ -1,0 +1,28 @@
+****************************************
+Report : area
+Design : mini_vending
+Version: O-2018.06
+Date   : Tue Mar 30 18:25:26 2021
+****************************************
+
+Library(s) Used:
+
+    slow (File: /usr/cad/CBDK/CBDK_IC_Contest_v2.1/SynopsysDC/db/slow.db)
+
+Number of ports:                           42
+Number of nets:                            76
+Number of cells:                           40
+Number of combinational cells:             30
+Number of sequential cells:                 9
+Number of macros/black boxes:               0
+Number of buf/inv:                          8
+Number of references:                       8
+
+Combinational area:                349.664403
+Buf/Inv area:                       28.855799
+Noncombinational area:             258.004791
+Macro/Black Box area:                0.000000
+Net Interconnect area:            4713.356964
+
+Total cell area:                   607.669194
+Total area:                       5321.026159
